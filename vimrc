@@ -20,3 +20,6 @@ hi Search cterm=reverse
 
 command -nargs=* E :Explore <args>
 map <F5> :set paste!<CR>
+
+source ~/.vim/jfold.vim
+hi Folded ctermfg=lightgray ctermbg=darkgray cterm=underline
