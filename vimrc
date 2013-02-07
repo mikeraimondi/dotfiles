@@ -30,6 +30,3 @@ hi Folded ctermfg=lightgray ctermbg=darkgray cterm=underline
 command -nargs=* E :Explore <args>
 map <F5> :set paste!<CR>
 map <F6> :make \|cwindow 10<CR>
-
-" Install folding
-source ~/.vim/jfold.vim
