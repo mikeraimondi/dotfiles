@@ -1,0 +1,8 @@
+[user]
+	name = Michael Raimondi
+	email = zeno@pobox.com
+[core]
+	editor = vim
+	excludesfile = ~/.gitignore_global
+[push]
+	default = simple
