@@ -44,3 +44,6 @@ command -nargs=* E :Explore <args>
 map <C-n> :NERDTreeToggle<CR>
 map <F5> :set paste!<CR>
 map <F6> :make \|cwindow 10<CR>
+
+" Do not fold on open
+set foldlevel=10
