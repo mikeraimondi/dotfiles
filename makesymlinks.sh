@@ -29,3 +29,7 @@ for file in $files; do
     echo "Creating symlink to $file in home directory."
     ln -s $dir/$file ~/.$file
 done
+
+# create symlink for vim color directory
+echo "Creating symlink to vim/color"
+ln -s ~/dotfiles/vim/zenburn/colors ~/dotfiles/vim/colors
