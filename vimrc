@@ -41,14 +41,14 @@ set foldlevel=10
 " Set colors
 if $TERM == "xterm-256color" || $TERM == "screen-256color" || $COLORTERM == "gnome-terminal"
 	  set t_Co=256
+		colors zenburn
+		hi LineNr ctermfg=7
+		hi Search cterm=reverse
+		hi Folded ctermfg=lightgray ctermbg=darkgray cterm=underline
 endif
-colors zenburn
-hi LineNr ctermfg=7
-hi Search cterm=reverse
-hi Folded ctermfg=lightgray ctermbg=darkgray cterm=underline
 
 " Set shortcuts
 command -nargs=* E :Explore <args>
 map <C-n> :NERDTreeToggle<CR>
-map <F5> :set paste!<CR>
-map <F6> :make \|cwindow 10<CR>
+map <C-c> :set paste!<CR>
+map <C-m> :make \|cwindow 10<CR>
