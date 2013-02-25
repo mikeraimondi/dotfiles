@@ -8,5 +8,6 @@ Icon?
 ehthumbs.db
 Thumbs.db
 
-# Vim swap files #
+# Vim ephemera #
 *.swp
+.netrwhist
