@@ -30,4 +30,4 @@
 	url = https://github.com/vim-scripts/closetag.vim.git
 [submodule "vim/powerline-fonts"]
 	path = vim/powerline-fonts
-	url = https://github.com/Lokaltog/powerline-fonts
+	url = https://github.com/Lokaltog/powerline-fonts.git
