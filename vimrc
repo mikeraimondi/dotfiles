@@ -51,4 +51,4 @@ endif
 command -nargs=* E :Explore <args>
 map <C-n> :NERDTreeToggle<CR>
 map <C-c> :set paste!<CR>
-map <C-m> :make \|cwindow 10<CR>
+map <F12> :make \|cwindow 10<CR>
