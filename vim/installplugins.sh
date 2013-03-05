@@ -12,5 +12,5 @@ echo "...done"
 
 #install powerline
 echo "Installing Powerline"
-pip install --user git+git://github.com/Lokaltog/powerline
+pip install --user -U git+git://github.com/Lokaltog/powerline
 echo "...done"
