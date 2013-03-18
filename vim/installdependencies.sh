@@ -18,8 +18,8 @@ echo "..done"
 # build Vim
 echo "Building Vim"
 mkdir /tmp/src
-cd /tmp/src
+cd /tmp/dotfiles
 hg clone https://vim.googlecode.com/hg/ vim
-cd /tmp/src/vim
+cd /tmp/dotfiles/vim
 ./configure --with-features=huge --enable-pythoninterp --with-python-config-dir=/usr/lib/python2.7/config
 make && make install
