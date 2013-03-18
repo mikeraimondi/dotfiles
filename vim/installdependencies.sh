@@ -17,7 +17,7 @@ echo "..done"
 
 # build Vim
 echo "Building Vim"
-mkdir /tmp/src
+mkdir /tmp/dotfiles
 cd /tmp/dotfiles
 hg clone https://vim.googlecode.com/hg/ vim
 cd /tmp/dotfiles/vim
