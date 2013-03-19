@@ -11,3 +11,6 @@ Thumbs.db
 # Vim ephemera #
 *.swp
 .netrwhist
+
+# Vagrant #
+.vagrant
