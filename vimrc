@@ -29,6 +29,15 @@ map <C-h> :nohlsearch<CR>
 
 " Set up powerline
 set rtp+=~/dotfiles/vim/bundle/powerline/powerline/bindings/vim
+" Fix esc delay
+if ! has('gui_running')
+	set ttimeoutlen=10
+	augroup FastEscape
+		autocmd!
+		au InsertEnter * set timeoutlen=0
+		au InsertLeave * set timeoutlen=1000
+	augroup END
+endif
 
 " Open NERDtree if no files are specified
 autocmd vimenter * if !argc() | NERDTree | endif
@@ -39,15 +48,21 @@ autocmd bufenter * if (winnr("$") == 1 && exists("b:NERDTreeType") && b:NERDTree
 set foldlevel=10
 
 " Set colors
-if $TERM == "xterm-256color" || $TERM == "screen-256color" || $COLORTERM == "gnome-terminal"
-	  set t_Co=256
-	  let g:zenburn_high_Contrast=1
-		colors zenburn
-		hi Visual cterm=reverse
+if has('gui_running')
+	set background=light
+else
+	set background=dark
+endif
+colorscheme solarized
+"if $TERM == "xterm-256color" || $TERM == "screen-256color" || $COLORTERM == "gnome-terminal"
+"	  set t_Co=256
+	  "let g:zenburn_high_Contrast=1
+		"colors zenburn
+		"hi Visual cterm=reverse
 		"hi LineNr ctermfg=7
 		"hi Search cterm=reverse
 		"hi Folded ctermfg=lightgray ctermbg=darkgray cterm=underline
-endif
+"endif
 
 " Set shortcuts
 command -nargs=* E :Explore <args>

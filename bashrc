@@ -109,6 +109,9 @@ fi
 # Colorized listings
 export CLICOLOR=1
 
+# For Powerline config files
+export XDG_CONFIG_HOME="$HOME/.config"
+
 # Make libraries in /usr/local available to Python
 export LD_RUN_PATH=/usr/local/lib
 
