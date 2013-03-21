@@ -41,10 +41,12 @@ set foldlevel=10
 " Set colors
 if $TERM == "xterm-256color" || $TERM == "screen-256color" || $COLORTERM == "gnome-terminal"
 	  set t_Co=256
+	  let g:zenburn_high_Contrast=1
 		colors zenburn
-		hi LineNr ctermfg=7
-		hi Search cterm=reverse
-		hi Folded ctermfg=lightgray ctermbg=darkgray cterm=underline
+		hi Visual cterm=reverse
+		"hi LineNr ctermfg=7
+		"hi Search cterm=reverse
+		"hi Folded ctermfg=lightgray ctermbg=darkgray cterm=underline
 endif
 
 " Set shortcuts

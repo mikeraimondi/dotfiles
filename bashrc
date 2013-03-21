@@ -106,10 +106,13 @@ if [ -f /etc/bash_completion ] && ! shopt -oq posix; then
     . /etc/bash_completion
 fi
 
-#Colorized listings
+# Colorized listings
 export CLICOLOR=1
 
-#Alias vim to vi
+# Make libraries in /usr/local available to Python
+export LD_RUN_PATH=/usr/local/lib
+
+# Alias vim to vi
 alias vi="vim"
 
 PATH=$PATH:$HOME/.rvm/bin # Add RVM to PATH for scripting
