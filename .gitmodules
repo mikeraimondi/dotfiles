@@ -1,12 +1,12 @@
 [submodule "vim/bundle/vim-surround"]
 	path = vim/bundle/vim-surround
-	url = git://github.com/tpope/vim-surround.git
+	url = https://github.com/tpope/vim-surround.git
 [submodule "vim/bundle/ctrlp"]
 	path = vim/bundle/ctrlp
-	url = git://github.com/kien/ctrlp.vim.git
+	url = https://github.com/kien/ctrlp.vim.git
 [submodule "vim/bundle/syntastic"]
 	path = vim/bundle/syntastic
-	url = git://github.com/scrooloose/syntastic.git
+	url = https://github.com/scrooloose/syntastic.git
 [submodule "vim/bundle/numbers.vim"]
 	path = vim/bundle/numbers.vim
 	url = https://github.com/myusuf3/numbers.vim.git
@@ -24,7 +24,7 @@
 	url = https://github.com/jnurmine/Zenburn.git
 [submodule "vim/bundle/powerline"]
 	path = vim/bundle/powerline
-	url = https://github.com/Lokaltog/powerline.git
+	url = https://github.com/chronophasiac/powerline.git
 [submodule "vim/bundle/closetag.vim"]
 	path = vim/bundle/closetag.vim
 	url = https://github.com/vim-scripts/closetag.vim.git
