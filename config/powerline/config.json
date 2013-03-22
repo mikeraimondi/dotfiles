@@ -24,7 +24,7 @@
 		},
 		"tmux": {
 			"colorscheme": "default",
-			"theme": "default"
+			"theme": "modified"
 		},
 		"vim": {
 			"colorscheme": "solarized",

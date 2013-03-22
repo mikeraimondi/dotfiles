@@ -38,6 +38,8 @@ if ! has('gui_running')
 		au InsertLeave * set timeoutlen=1000
 	augroup END
 endif
+" Hide mode text below powerline
+set noshowmode
 
 " Open NERDtree if no files are specified
 autocmd vimenter * if !argc() | NERDTree | endif
