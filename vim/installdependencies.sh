@@ -14,15 +14,16 @@ if [[ "$OSTYPE" == "linux-gnu" ]]; then
 		 echo "This script must be run as root" 1>&2
 		 exit 1
 	fi
+
 	echo "Installing packages"
 	apt-get update && apt-get install aptitude
 	aptitude -y install git mercurial tmux ncurses-dev python-dev python-pip cmake build-essential python-psutil
 	pip install -U psutil
 	echo "..done"
+
 	# build libgit2
 	echo "Building libgit2"
-	# export required so Python can access libgit2
-	export LD_RUN_PATH=/usr/local/lib
+	export LD_RUN_PATH=/usr/local/lib #required so Python can access libgit2
 	mkdir -p $tempdir
 	cd $tempdir
 	if [ ! -d "libgit2" ]; then
@@ -60,7 +61,7 @@ if [[ "$OSTYPE" == "linux-gnu" ]]; then
 	fi
 	cd vim
 	hg pull && hg update
-	./configure --prefix=/usr/local --with-features=huge --enable-pythoninterp --with-python-config-dir=/usr/lib/python2.7/config
+	./configure --prefix=/usr/local --with-features=huge --enable-pythoninterp --with-python-config-dir=/usr/lib/python2.7/config --enable-gui=no
 	make && make install
 	echo "..done"
 
@@ -68,7 +69,7 @@ if [[ "$OSTYPE" == "linux-gnu" ]]; then
 elif [[ "$OSTYPE" == "darwin"* ]]; then
 	echo "Installing packages"
 	brew update
-	brew install python mercurial git tmux cmake vim libgit2
+	brew install python mercurial git tmux cmake vim libgit2 vim
 	pip install -U psutil pygit2
 	echo "..done"
 

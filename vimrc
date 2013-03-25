@@ -29,6 +29,8 @@ map <C-h> :nohlsearch<CR>
 
 " Set up powerline
 set rtp+=~/dotfiles/vim/bundle/powerline/powerline/bindings/vim
+" Hide mode text below powerline
+set noshowmode
 " Fix esc delay
 if ! has('gui_running')
 	set ttimeoutlen=10
@@ -38,8 +40,6 @@ if ! has('gui_running')
 		au InsertLeave * set timeoutlen=1000
 	augroup END
 endif
-" Hide mode text below powerline
-set noshowmode
 
 " Open NERDtree if no files are specified
 autocmd vimenter * if !argc() | NERDTree | endif
@@ -50,21 +50,23 @@ autocmd bufenter * if (winnr("$") == 1 && exists("b:NERDTreeType") && b:NERDTree
 set foldlevel=10
 
 " Set colors
-if has('gui_running')
-	set background=light
-else
-	set background=dark
+if $TERM == "xterm-256color" || $TERM == "screen-256color" || $COLORTERM == "gnome-terminal"
+	" Solarized scheme
+	if has('gui_running')
+		set background=light
+	else
+		set background=dark
+	endif
+	colorscheme solarized
+	" Zenburn scheme
+	"set t_Co=256
+	"let g:zenburn_high_Contrast=1
+	"colors zenburn
+	"hi Visual cterm=reverse
+	"hi LineNr ctermfg=7
+	"hi Search cterm=reverse
+	"hi Folded ctermfg=lightgray ctermbg=darkgray cterm=underline
 endif
-colorscheme solarized
-"if $TERM == "xterm-256color" || $TERM == "screen-256color" || $COLORTERM == "gnome-terminal"
-"	  set t_Co=256
-	  "let g:zenburn_high_Contrast=1
-		"colors zenburn
-		"hi Visual cterm=reverse
-		"hi LineNr ctermfg=7
-		"hi Search cterm=reverse
-		"hi Folded ctermfg=lightgray ctermbg=darkgray cterm=underline
-"endif
 
 " Set shortcuts
 command -nargs=* E :Explore <args>
