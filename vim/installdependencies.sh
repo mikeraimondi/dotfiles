@@ -69,7 +69,7 @@ if [[ "$OSTYPE" == "linux-gnu" ]]; then
 elif [[ "$OSTYPE" == "darwin"* ]]; then
 	echo "Installing packages"
 	brew update
-	brew install python mercurial git tmux cmake vim libgit2 vim
+	brew install python mercurial git tmux cmake vim libgit2
 	pip install -U psutil pygit2
 	echo "..done"
 
