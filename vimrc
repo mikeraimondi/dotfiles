@@ -28,9 +28,9 @@ set hlsearch
 map <C-h> :nohlsearch<CR>
 
 " Set up powerline
-" set rtp+=~/dotfiles/vim/bundle/powerline/powerline/bindings/vim
+set rtp+=~/dotfiles/vim/bundle/powerline/powerline/bindings/vim
 " Hide mode text below powerline
-" set noshowmode
+set noshowmode
 " Fix esc delay
 if ! has('gui_running')
 	set ttimeoutlen=10
