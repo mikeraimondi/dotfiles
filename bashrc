@@ -118,4 +118,7 @@ export LD_RUN_PATH=/usr/local/lib
 # Alias vim to vi
 alias vi="vim"
 
+# Set system editor to compiled vim
+export EDITOR=/usr/local/bin/vim
+
 PATH=$PATH:$HOME/.rvm/bin # Add RVM to PATH for scripting

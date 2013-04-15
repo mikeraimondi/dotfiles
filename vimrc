@@ -5,6 +5,8 @@ filetype plugin indent on
 
 " Install pathogen
 runtime bundle/vim-pathogen/autoload/pathogen.vim
+let g:pathogen_disabled = []
+call add(g:pathogen_disabled, 'YouCompleteMe')
 execute pathogen#infect()
 execute pathogen#helptags()
 
@@ -73,3 +75,6 @@ command -nargs=* E :Explore <args>
 map <C-n> :NERDTreeToggle<CR>
 map <C-c> :set paste!<CR>
 map <F12> :make \|cwindow 10<CR>
+
+" Set syntax checkers
+let g:syntastic_ruby_checkers=['mri']
