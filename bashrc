@@ -109,6 +109,9 @@ fi
 # Colorized listings
 export CLICOLOR=1
 
+# Colorized grep
+export GREP_OPTIONS='--color=always'
+
 # For Powerline config files
 export XDG_CONFIG_HOME="$HOME/.config"
 
