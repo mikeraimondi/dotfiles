@@ -22,7 +22,7 @@ set smartcase
 set hlsearch
 
 " Load plugins only on the latest versions
-if (v:version >= 703) && (has("patch900"))
+if (v:version >= 703) && (has("patch754"))
 	" Install pathogen
 	runtime bundle/vim-pathogen/autoload/pathogen.vim
 	let g:pathogen_disabled = []
