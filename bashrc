@@ -124,4 +124,7 @@ alias vi="vim"
 # Set system editor to compiled vim
 export EDITOR=/usr/local/bin/vim
 
+# Install liquidprompt
+source ~/dotfiles/liquidprompt/liquidprompt
+
 PATH=$PATH:$HOME/.rvm/bin # Add RVM to PATH for scripting
