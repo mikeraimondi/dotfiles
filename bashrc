@@ -128,3 +128,8 @@ export EDITOR=/usr/local/bin/vim
 source ~/dotfiles/liquidprompt/liquidprompt
 
 PATH=$PATH:$HOME/.rvm/bin # Add RVM to PATH for scripting
+
+# Source RVM
+if test -f ~/.rvm/scripts/rvm; then
+    [ "$(type -t rvm)" = "function" ] || source ~/.rvm/scripts/rvm
+fi
