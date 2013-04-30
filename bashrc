@@ -121,6 +121,9 @@ export LD_RUN_PATH=/usr/local/lib
 # Alias vim to vi
 alias vi="vim"
 
+# Alias s to Sublime Text
+alias s="subl"
+
 # Set system editor to compiled vim
 export EDITOR=/usr/local/bin/vim
 
@@ -133,3 +136,6 @@ PATH=$PATH:$HOME/.rvm/bin # Add RVM to PATH for scripting
 if test -f ~/.rvm/scripts/rvm; then
     [ "$(type -t rvm)" = "function" ] || source ~/.rvm/scripts/rvm
 fi
+
+### Added by the Heroku Toolbelt
+export PATH="/usr/local/heroku/bin:$PATH"

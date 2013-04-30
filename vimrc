@@ -27,7 +27,7 @@ if (v:version >= 703) && (has("patch754"))
 	runtime bundle/vim-pathogen/autoload/pathogen.vim
 	let g:pathogen_disabled = []
 	" Temporarily disable YCM
-	"call add(g:pathogen_disabled, 'YouCompleteMe')
+	call add(g:pathogen_disabled, 'YouCompleteMe')
 	silent! execute pathogen#infect()
 	silent! execute pathogen#helptags()
 
@@ -59,12 +59,12 @@ if (v:version >= 703) && (has("patch754"))
 	" Set colors
 	if $TERM == "xterm-256color" || $TERM == "screen-256color" || $COLORTERM == "gnome-terminal"
 		" Solarized scheme
-		if has('gui_running')
-			set background=light
-		else
-			set background=dark
-		endif
-		colorscheme solarized
+		" if has('gui_running')
+		"	set background=light
+		"else
+		"	set background=dark
+		"endif
+		"colorscheme solarized
 		" Zenburn scheme
 		"set t_Co=256
 		"let g:zenburn_high_Contrast=1
