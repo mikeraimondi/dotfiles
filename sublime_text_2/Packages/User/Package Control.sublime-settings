@@ -7,8 +7,12 @@
 		"JSLint",
 		"Origami",
 		"Package Control",
+		"Sass",
 		"SideBarEnhancements",
-		"SublimeLinter"
+		"SublimeLinter",
+		"Surround",
+		"Vintage Surround",
+		"Vintage-Origami"
 	],
 	"repositories":
 	[
