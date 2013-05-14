@@ -27,7 +27,7 @@ if (v:version >= 703) && (has("patch754"))
 	runtime bundle/vim-pathogen/autoload/pathogen.vim
 	let g:pathogen_disabled = []
 	" Temporarily disable YCM
-	call add(g:pathogen_disabled, 'YouCompleteMe')
+	" call add(g:pathogen_disabled, 'YouCompleteMe')
 	silent! execute pathogen#infect()
 	silent! execute pathogen#helptags()
 

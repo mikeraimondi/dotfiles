@@ -2,8 +2,10 @@
 	"auto_upgrade_last_run": null,
 	"installed_packages":
 	[
+		"AdvancedNewFile",
 		"Backbone.js",
 		"CoffeeScript",
+		"DashDoc",
 		"Gist",
 		"Git",
 		"GitGutter",
@@ -11,6 +13,7 @@
 		"GitHubinator",
 		"Handlebars",
 		"JSLint",
+		"Liquid",
 		"Origami",
 		"Package Control",
 		"RSpec (snippets and syntax)",
