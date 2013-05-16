@@ -1,4 +1,4 @@
 {
-	"last_test_run": "rspec spec/models/user_spec.rb",
-	"last_test_working_dir": "/Users/mike/GDrive/rails_projects/timevault"
+	"last_test_run": "rspec teachers_assistant_round_1_TDD_spec.rb/ -l11",
+	"last_test_working_dir": "/Users/mike/GDrive/Launch_Academy/teachers_assistant/teachers_assistant_round_1_TDD_spec.rb"
 }
