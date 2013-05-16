@@ -139,3 +139,6 @@ fi
 
 ### Added by the Heroku Toolbelt
 export PATH="/usr/local/heroku/bin:$PATH"
+
+# Add postgres.app to PATH
+PATH="/Applications/Postgres.app/Contents/MacOS/bin:$PATH"
