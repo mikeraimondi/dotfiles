@@ -6,6 +6,7 @@
 		"Backbone.js",
 		"CoffeeScript",
 		"DashDoc",
+		"FindKeyConflicts",
 		"Gist",
 		"Git",
 		"GitGutter",
