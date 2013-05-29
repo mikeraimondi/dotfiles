@@ -40,3 +40,6 @@
 [submodule "liquidprompt"]
 	path = liquidprompt
 	url = https://github.com/nojhan/liquidprompt.git
+[submodule "githooks"]
+	path = githooks
+	url = git@github.com:chronophasiac/githooks.git

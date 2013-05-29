@@ -26,13 +26,11 @@ if (v:version >= 703) && (has("patch754"))
 	" Install pathogen
 	runtime bundle/vim-pathogen/autoload/pathogen.vim
 	let g:pathogen_disabled = []
-	" Temporarily disable YCM
-	" call add(g:pathogen_disabled, 'YouCompleteMe')
 	silent! execute pathogen#infect()
 	silent! execute pathogen#helptags()
 
 	" Set up powerline
-	set rtp+=~/dotfiles/vim/bundle/powerline/powerline/bindings/vim
+	" set rtp+=~/dotfiles/vim/bundle/powerline/powerline/bindings/vim
 	" Hide mode text below powerline
 	set noshowmode
 	" Fix esc delay
