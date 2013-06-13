@@ -122,7 +122,7 @@ export LD_RUN_PATH=/usr/local/lib
 alias vi="vim"
 
 # Alias s to Sublime Text
-alias s="subl"
+alias s="subl --new-window"
 
 # Set system editor to compiled vim
 export EDITOR=/usr/local/bin/vim

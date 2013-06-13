@@ -3,6 +3,7 @@
 	"installed_packages":
 	[
 		"AdvancedNewFile",
+		"Alignment",
 		"Backbone.js",
 		"CoffeeScript",
 		"DashDoc",
@@ -17,6 +18,7 @@
 		"Liquid",
 		"Origami",
 		"Package Control",
+		"Rails Partial",
 		"RSpec",
 		"RSpec (snippets and syntax)",
 		"rspec-snippets",
