@@ -2,7 +2,7 @@
 	name = Michael Raimondi
 	email = zeno@pobox.com
 [core]
-	editor = vim
+	editor = subl -n -w
 	excludesfile = ~/.gitignore_global
 [push]
 	default = tracking
