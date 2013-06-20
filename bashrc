@@ -121,14 +121,17 @@ export LD_RUN_PATH=/usr/local/lib
 # Alias vim to vi
 alias vi="vim"
 
-# Alias s to Sublime Text
-alias s="subl --new-window"
-
-# Set system editor to compiled vim
-export EDITOR=/usr/local/bin/vim
+# Set system editor to Sublime and alias if it exists
+if [ -f /usr/local/bin/subl ]; then
+    export EDITOR=/usr/local/bin/subl
+    alias s="subl --new-window"
+fi
 
 # Install liquidprompt
 source ~/dotfiles/liquidprompt/liquidprompt
+
+# Set port number for development
+export PORT=3000
 
 PATH=$PATH:$HOME/.rvm/bin # Add RVM to PATH for scripting
 
