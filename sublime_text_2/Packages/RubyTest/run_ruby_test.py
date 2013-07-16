@@ -14,7 +14,7 @@ class ShowInPanel:
     self.window.run_command("show_panel", {"panel": "output.exec"})
     if HIDE_PANEL:
       self.window.run_command("hide_panel")
-    self.panel.settings().set("color_scheme", "Packages/RubyTest/TestConsole.hidden-tmTheme")
+    self.panel.settings().set("color_scheme", THEME)
 
 
 class ShowInScratch:
@@ -30,8 +30,8 @@ class ShowInScratch:
     self.view.set_scratch(True)
     self.view.set_read_only(False)
 
-    self.view.settings().set("syntax", "Packages/RubyTest/TestConsole.tmLanguage")
-    self.view.settings().set("color_scheme", "Packages/RubyTest/TestConsole.hidden-tmTheme")
+    self.view.settings().set("syntax", SYNTAX)
+    self.view.settings().set("color_scheme", THEME)
     self.view.set_read_only(True)
     self.poll_copy()
     self.append('\n\n')
@@ -100,7 +100,7 @@ class TestMethodMatcher(object):
       if not match_obj:
         return None
       test_name = match_obj.group(1)[::-1]
-      return "%s%s%s" % ("/", test_name.replace("should", "").replace("\"", "").strip(), "/")
+      return "%s%s%s" % ("/", test_name.replace("should", "").replace("\"", "").replace("'", "").strip(), "/")
 
 
 class RubyTestSettings:
@@ -126,6 +126,8 @@ class BaseRubyTask(sublime_plugin.TextCommand):
     global AFTER_CALLBACK; AFTER_CALLBACK = s.get("after_callback")
     global COMMAND_PREFIX; COMMAND_PREFIX = False
     global SAVE_ON_RUN; SAVE_ON_RUN = s.get("save_on_run")
+    global SYNTAX; SYNTAX = s.get('syntax')
+    global THEME; THEME = s.get('theme')
 
     rbenv_cmd = os.path.expanduser('~/.rbenv/bin/rbenv')
     rvm_cmd = os.path.expanduser('~/.rvm/bin/rvm-auto-ruby')
@@ -221,7 +223,7 @@ class BaseRubyTask(sublime_plugin.TextCommand):
       if test_name is None:
         sublime.error_message("No test name!")
         return None
-      return RubyTestSettings().run_single_ruby_unit_command(relative_path=self.relative_file_path(), test_name=test_name)
+      return RubyTestSettings().run_single_ruby_unit_command(relative_path=self.relative_file_path(), test_name=test_name, line_number=self.get_current_line_number(view))
     def features(self): return super(BaseRubyTask.UnitFile, self).features() + ["run_test"]
     def get_project_root(self): return self.find_project_root()
 
@@ -233,7 +235,7 @@ class BaseRubyTask(sublime_plugin.TextCommand):
     def get_project_root(self): return self.find_project_root()
 
   class RSpecFile(RubyFile):
-    def possible_alternate_files(self): return list( set( [self.file_name.replace("_spec.rb", ".rb"), self.file_name.replace("_haml_spec.rb", ".haml")] ) - set([self.file_name]) )
+    def possible_alternate_files(self): return list( set( [self.file_name.replace("_spec.rb", ".rb"), self.file_name.replace(".haml_spec.rb", ".haml"), self.file_name.replace(".erb_spec.rb", ".erb")] ) - set([self.file_name]) )
     def run_all_tests_command(self): return RubyTestSettings().run_rspec_command(relative_path=self.relative_file_path())
     def run_single_test_command(self, view): return RubyTestSettings().run_single_rspec_command(relative_path=self.relative_file_path(), line_number=self.get_current_line_number(view))
     def features(self): return super(BaseRubyTask.RSpecFile, self).features() + ["run_test"]
@@ -242,7 +244,8 @@ class BaseRubyTask(sublime_plugin.TextCommand):
   class ErbFile(BaseFile):
     def verify_syntax_command(self): return RubyTestSettings().erb_verify_command(file_name=self.file_name)
     def can_verify_syntax(self): return True
-    def features(self): return ["verify_syntax"]
+    def possible_alternate_files(self): return [self.file_name.replace(".erb", ".erb_spec.rb")]
+    def features(self): return ["verify_syntax", "switch_to_test"]
 
   class HamlFile(BaseFile):
     def possible_alternate_files(self): return [self.file_name.replace(".haml", ".haml_spec.rb")]

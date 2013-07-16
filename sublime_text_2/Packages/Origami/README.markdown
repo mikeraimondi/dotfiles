@@ -23,19 +23,17 @@ These keyboard shortcuts are designed to make it really easy to modify the layou
 Install
 -------
 
-This plugin is available through Package Control, which is available here:
-
-    http://wbond.net/sublime_packages/package_control
+This plugin is available through [Package Control](http://wbond.net/sublime_packages/package_control).
 
 Manual Install
 --------------
 
 Go to your Packages subdirectory under ST2's data directory:
 
-* Windows: %APPDATA%\Sublime Text 2
-* OS X: ~/Library/Application Support/Sublime Text 2
-* Linux: ~/.config/sublime-text-2
-* Portable Installation: Sublime Text 2/Data
+* Windows: `%APPDATA%\Sublime Text 2`
+* OS X: `~/Library/Application Support/Sublime Text 2`
+* Linux: `~/.config/sublime-text-2`
+* Portable Installation: `Sublime Text 2/Data`
 
 Then clone this repository:
 
