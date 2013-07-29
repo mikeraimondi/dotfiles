@@ -1,5 +1,6 @@
 vim/colors
 sublime_text_2/Packages/User/Gist.sublime-settings
 config/xbuild
+config/stetic
 *.last-run
 *.cache

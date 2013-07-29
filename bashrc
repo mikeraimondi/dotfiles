@@ -133,12 +133,12 @@ source ~/dotfiles/liquidprompt/liquidprompt
 # Set port number for development
 export PORT=3000
 
+### Added by the Heroku Toolbelt
+export PATH="/usr/local/heroku/bin:$PATH"
+
 PATH=$PATH:$HOME/.rvm/bin # Add RVM to PATH for scripting
 
 # Source RVM
 if test -f ~/.rvm/scripts/rvm; then
     [ "$(type -t rvm)" = "function" ] || source ~/.rvm/scripts/rvm
 fi
-
-### Added by the Heroku Toolbelt
-export PATH="/usr/local/heroku/bin:$PATH"
