@@ -7,7 +7,7 @@
 	<key>command</key>
 	<string>#!/usr/bin/env bash
 
-. "$TM_BUNDLE_SUPPORT/lib/rvm_textmate"
+. "$TM_BUNDLE_SUPPORT/lib/init-command"
 
 cat &lt;&lt;'RUBYEOF' &gt; /tmp/textmate-command-$$.rb
 
@@ -30,6 +30,6 @@ ${TM_RUBY:-ruby} /tmp/textmate-command-$$.rb; exit_status=$?; rm /tmp/textmate-c
 	<key>scope</key>
 	<string>source.ruby.rspec</string>
 	<key>uuid</key>
-	<string>B5906021-8E54-4863-A13B-EA46333DB5F1</string>
+	<string>B5906021-8E54-4863-A13B-EA46333DB5F2</string>
 </dict>
 </plist>

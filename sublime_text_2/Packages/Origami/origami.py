@@ -43,6 +43,14 @@ def cells_adjacent_to_cell_in_direction(cells, cell, direction):
 		return [c for c in cells if fn(cell, c)]
 	return None
 
+def fixed_set_layout(window, layout):
+	#A bug was introduced in Sublime Text 3, sometime before 3053, in that it
+	#changes the active group to 0 when the layout is changed. Annoying.
+	active_group = window.active_group()
+	window.set_layout(layout)
+	num_groups = len(layout['cells'])
+	window.focus_group(min(active_group, num_groups-1))
+
 class PaneCommand(sublime_plugin.WindowCommand):
 	"Abstract base class for commands."
 	
@@ -51,16 +59,34 @@ class PaneCommand(sublime_plugin.WindowCommand):
 		print(layout)
 		cells = layout["cells"]
 		rows = layout["rows"]
-		cols = layout["cols"]	
+		cols = layout["cols"]
 		return rows, cols, cells
 	
 	def get_cells(self):
 		return self.get_layout()[2]
 	
-	def adjacent_cells(self, direction):
+	def adjacent_cell(self, direction):
 		cells = self.get_cells()
-		current_group = self.window.active_group()
-		return cells_adjacent_to_cell_in_direction(cells, cells[current_group], direction)
+		current_cell = cells[self.window.active_group()]
+		adjacent_cells = cells_adjacent_to_cell_in_direction(cells, current_cell, direction)
+		rows, cols, _ = self.get_layout()
+		
+		if direction in ["left", "right"]:
+			MIN, MAX, fields = YMIN, YMAX, rows
+		else: #up or down
+			MIN, MAX, fields = XMIN, XMAX, cols
+		
+		cell_overlap = []
+		for cell in adjacent_cells:
+			start = max(fields[cell[MIN]], fields[current_cell[MIN]])
+			end = min(fields[cell[MAX]], fields[current_cell[MAX]])
+			overlap = (end - start)# / (fields[cell[MAX]] - fields[cell[MIN]])
+			cell_overlap.append(overlap)
+		
+		if len(cell_overlap) != 0:
+			cell_index = cell_overlap.index(max(cell_overlap))
+			return adjacent_cells[cell_index]
+		return None
 	
 	def duplicated_views(self, original_group, duplicating_group):
 		original_views = self.window.views_in_group(original_group)
@@ -73,10 +99,10 @@ class PaneCommand(sublime_plugin.WindowCommand):
 		return dupe_views
 	
 	def travel_to_pane(self, direction):
-		adjacent_cells = self.adjacent_cells(direction)
-		if len(adjacent_cells) > 0:
+		adjacent_cell = self.adjacent_cell(direction)
+		if adjacent_cell:
 			cells = self.get_cells()
-			new_group_index = cells.index(adjacent_cells[0])
+			new_group_index = cells.index(adjacent_cell)
 			self.window.focus_group(new_group_index)
 	
 	def carry_file_to_pane(self, direction):
@@ -102,11 +128,75 @@ class PaneCommand(sublime_plugin.WindowCommand):
 		# original view.
 		new_view = window.active_view()
 		window.set_view_index(new_view, group, original_index)
+		
+		# Fix the new view's selection and viewport
+		new_sel = new_view.sel()
+		new_sel.clear()
+		for s in view.sel():
+			new_sel.add(s)
+		sublime.set_timeout(lambda : new_view.set_viewport_position(view.viewport_position(), False), 0)
+		
 		self.carry_file_to_pane(direction)
 	
 	def create_pane_with_file(self,direction):
 		self.create_pane(direction)
 		self.carry_file_to_pane(direction)
+
+	def zoom_pane(self, fraction):
+		if fraction == None:
+			fraction = .9
+		
+		fraction = min(1, max(0, fraction))
+		
+		window = self.window
+		rows,cols,cells = self.get_layout()
+		current_cell = cells[window.active_group()]
+
+		current_col = current_cell[0]
+		num_cols = len(cols)-1
+
+		current_col_width = 1 if num_cols==1 else fraction
+		other_col_width = 0 if num_cols==1 else (1-current_col_width)/(num_cols-1)
+
+		cols = [0.0]
+		for i in range(0,num_cols):
+			cols.append(cols[i] + (current_col_width if i == current_col else other_col_width))
+
+		current_row = current_cell[1]
+		num_rows = len(rows)-1
+
+		current_row_height = 1 if num_rows==1 else fraction
+		other_row_height = 0 if num_rows==1 else (1-current_row_height)/(num_rows-1)
+		rows = [0.0]
+		for i in range(0,num_rows):
+			rows.append(rows[i] + (current_row_height if i == current_row else other_row_height))
+
+		layout = {"cols": cols, "rows": rows, "cells": cells}
+		print(layout)
+		fixed_set_layout(window, layout)
+
+	def unzoom_pane(self):
+		window = self.window
+		rows,cols,cells = self.get_layout()
+		current_cell = cells[window.active_group()]
+
+		num_cols = len(cols)-1
+		col_width = 1/num_cols
+
+		cols = [0.0]
+		for i in range(0,num_cols):
+			cols.append(cols[i] + col_width)
+
+		num_rows = len(rows)-1
+		row_height = 1/num_rows
+		
+		rows = [0.0]
+		for i in range(0,num_rows):
+			rows.append(rows[i] + row_height)
+
+		layout = {"cols": cols, "rows": rows, "cells": cells}
+		print(layout)
+		fixed_set_layout(window, layout)
 
 	def create_pane(self, direction):
 		window = self.window
@@ -139,7 +229,7 @@ class PaneCommand(sublime_plugin.WindowCommand):
 			cells.append(unfocused_cell)
 			layout = {"cols": cols, "rows": rows, "cells": cells}
 			print(layout)
-			window.set_layout(layout)
+			fixed_set_layout(window, layout)
 	
 	def destroy_pane(self, direction):
 		window = self.window
@@ -192,7 +282,7 @@ class PaneCommand(sublime_plugin.WindowCommand):
 			
 			layout = {"cols": cols, "rows": rows, "cells": cells}
 			print(layout)
-			window.set_layout(layout)
+			fixed_set_layout(window, layout)
 
 
 class TravelToPaneCommand(PaneCommand):
@@ -214,6 +304,13 @@ class CreatePaneWithFileCommand(PaneCommand):
 	def run(self, direction):
 		self.create_pane_with_file(direction)
 
+class ZoomPaneCommand(PaneCommand):
+	def run(self, fraction=None):
+		self.zoom_pane(fraction)
+
+class UnzoomPaneCommand(PaneCommand):
+	def run(self):
+		self.unzoom_pane()
 
 class CreatePaneCommand(PaneCommand):
 	def run(self, direction):
@@ -224,3 +321,31 @@ class CreatePaneCommand(PaneCommand):
 class DestroyPaneCommand(PaneCommand):
 	def run(self, direction):
 		self.destroy_pane(direction)
+
+
+class AutoZoomOnFocus(sublime_plugin.EventListener):
+	running = False
+	
+	def delayed_zoom(self, view, fraction):
+		# zoom_pane hangs sublime if you destroy the pane above or to your left.
+		# call it in a sublime.set_timeout to fix the issue
+		
+		args = {}
+		# Work correctly if someone sets "origami_auto_zoom_on_focus": true rather
+		# than e.g. "origami_auto_zoom_on_focus": .8.
+		if fraction != True:
+			args["fraction"] = fraction
+		view.window().run_command("zoom_pane", args)
+		self.running = False
+	
+	def on_activated(self, view):
+		print(self.running)
+		if self.running:
+			return
+		fraction = view.settings().get("origami_auto_zoom_on_focus", False)
+		if not fraction:
+			return
+		if view.settings().get("is_widget"):
+			return
+		self.running = True
+		sublime.set_timeout(lambda: self.delayed_zoom(view, fraction), 0)

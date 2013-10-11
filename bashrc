@@ -133,6 +133,11 @@ source ~/dotfiles/liquidprompt/liquidprompt
 # Set port number for development
 export PORT=3000
 
+export PATH="/usr/local/bin:$PATH"
+
+# Add global NPM packages to path
+export PATH="/usr/local/share/npm/bin:$PATH"
+
 ### Added by the Heroku Toolbelt
 export PATH="/usr/local/heroku/bin:$PATH"
 

@@ -1,8 +1,9 @@
-# Sublime Text 2 Handlebars.js bundle
+# Sublime Text 2 / 3 Handlebars.js bundle
 
-- Colors of Handlebars expressions are selected to be in contrast with the surrounding HTML.
+- Colours of Handlebars expressions are selected to be in contrast with the surrounding HTML.
 - Handlebars expressions get syntax highlighting in HTML attributes.
 - Parameters passed to block expressions get syntax highlighting too.
+- Works both with individual template files and inline templates in script tags.
 - Key bindings for `{{! Handlebars comments }}`
 - Tab triggers for
   - `if` → `{{#if }}`
@@ -12,7 +13,8 @@
   - `each` → `{{#each }}`
   - `with` → `{{#with }}`
   - `par` → `{{> }}` (for partials)
-  - `x-temp` → `<script id="$1" type="text/x-handlebars-template">` (inline script tag in HTML files)
+  - `x-temp` → `<script type="text/x-handlebars-template" data-template-name="$1">` (inline script tag in HTML files using the Ember recommended `data-template-name` attribute)
+  - `x-id` → `<script type="text/x-handlebars-template" id="$1">` (inline script tag in HTML files using the legacy `id` attribute)
 
 ## About Handlebars.js
 
@@ -29,10 +31,20 @@ If you haven't used it yet, just install it from the link above and then:
 1. Press Shift + Command (or Control) + P
 2. Type "install", to bring up the "Package Control: Install Package" option, and press Enter
 3. Look for "Handlebars", and press Enter to install it.
-4. Choose "Handlebars" in the bottom right corner with one of your template files open
+4. Choose "Handlebars" in the bottom right corner with one of your template files open (or in case you have inline templates use Handlebars instead of HTML, it's gracefully extending it so you shouldn't lose anything)
 5. Profit
 
 Package Control will also auto-update the package from this point on!
+
+## Testing / contribution
+
+There are some sample templates in `test/` folder. It's possible to see the different supported and yet to be implemented use cases there.
+
+If you want to work on the package you should install AAAPackageDev either [from Github](https://github.com/SublimeText/AAAPackageDev) or from Package Control. With that you can edit the JSON version (`Handlebars.JSON-tmLanguage`) and let it export the Plist with the ST Build System.
+
+The nicest development setup I found so far is to have the package installed via Package Control and then symlinking the development Git repo to `Sublime settings folder > Packages`, which then overrides the installed one so you can toggle between them easily.
+
+Another great trick I found out about recently is the `Show scope name` shortcut (Shift + Control + P (OSX) or Shift + Control + Alt + P (Windows)) which will display the language scope on the status bar based on where your cursor is.
 
 ## Precompilation
 

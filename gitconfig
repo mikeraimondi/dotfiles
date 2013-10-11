@@ -17,3 +17,8 @@
 	lg = log --pretty=format:'%h %ad | %s%d [%an]' --graph --date=short
 	type = cat-file -t
   dump = cat-file -p
+[mergetool "sublime"]
+	cmd = subl -w -n $MERGED
+	trustExitCode = false
+[merge]
+	tool = sublime

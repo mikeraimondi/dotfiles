@@ -1,0 +1,2 @@
+. "$TM_BUNDLE_SUPPORT/lib/rvm_textmate"
+cd "$TM_PROJECT_DIRECTORY"
