@@ -1,0 +1,5 @@
+{
+  "envPATH": "/usr/local/bin",
+  "binDir": "/usr/local/share/npm/bin",
+  "compileOnSave": false
+}

@@ -132,11 +132,17 @@ class BaseRubyTask(sublime_plugin.TextCommand):
     global THEME; THEME = s.get('theme')
 
 
-    rbenv = s.get("check_for_rbenv")
-    rvm = s.get("check_for_rvm")
+    rbenv   = s.get("check_for_rbenv")
+    rvm     = s.get("check_for_rvm")
     bundler = s.get("check_for_bundler")
+    spring  = s.get("check_for_spring")
     if rbenv or rvm: self.rbenv_or_rvm(s, rbenv, rvm)
+    if spring: self.spring_support()
     if bundler: self.bundler_support()
+    
+  def spring_support(self):
+    global COMMAND_PREFIX
+    COMMAND_PREFIX = COMMAND_PREFIX + " spring "
 
   def rbenv_or_rvm(self, s, rbenv, rvm):
     which = os.popen('which rbenv').read().split('\n')[0]
@@ -289,7 +295,9 @@ class BaseRubyTask(sublime_plugin.TextCommand):
 
   def find_partition_folder(self, file_name, default_partition_folder):
     folders = self.view.window().folders()
+    file_name = file_name.replace("\\","\\\\")
     for folder in folders:
+      folder = folder.replace("\\","\\\\")
       if re.search(folder, file_name):
         return re.sub(os.sep + '.+', "", file_name.replace(folder,"")[1:])
     return default_partition_folder

@@ -1,13 +1,14 @@
 Sublime-JSLint
 ==============
 
-Fast and easy JSLint build system for Sublime Text 2. Does not require Java. Uses Node.JS.
+Fast and easy JSLint build system for Sublime Text 2 and Node.JS.
 
-   * Optionally run JSLint when you save a .js, .css, .sass, .less, or .json file.
-   * Menu items to run JSLint manually and set preferences.
-   * Jump to error using F4 / Shift+F4.
-   * Built-in jslint; only needs Node.JS installed on your system.
-   * Runs on Linux, MacOS and Windows.
+   * Does not require Java&trade;.
+   * It has jslint built in; only needs [Node.JS](http://nodejs.org) installed on your system.
+   * It can automatically run JSLint whenever you save a file.
+   * Fully configurable linting options.
+   * Jump to errors using F4 / Shift+F4.
+   * Works on Linux, MacOS and Windows.
 
 Prerequisites
 -------------
@@ -31,7 +32,7 @@ Installation
       * Windows: %APPDATA%/Sublime Text 2/Packages/JSLint
 
 ### Note for Sublime Text 3 Users:
-   * Get files from the package archive and unzip to Packages/JSLint directory:
+   * Get files from the [package archive](https://github.com/darrenderidder/Sublime-JSLint/archive/master.zip) and unzip to Packages/JSLint directory:
       * Linux: ~/.config/sublime-text-3/Packages/JSLint
       * Mac: ~/Library/Application Support/Sublime Text 3/Packages/JSLint
       * Windows: %APPDATA%/Sublime Text 3/Packages/JSLint
@@ -55,3 +56,19 @@ Any of the following will work:
 Settings
 --------
    * Edit filename extensions under Preferences > Package Settings > JSLint. Any filename extensions there will be jslinted on save.
+
+Troubleshooting
+---------------
+
+### "No such file or directory" when saving
+
+When, on saving a .js file, you get this:
+
+    [Errno 2] No such file or directory
+    [cmd:  [u'node', ...]]
+
+
+then probably the command to run nodejs is different on your system.
+Go to Preferences -> Package settings -> JSLint -> Advanced build settings to change it.
+The first item in the list under ``cmd`` is the name of the binary.
+

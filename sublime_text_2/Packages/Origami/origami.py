@@ -13,20 +13,24 @@ def decrement_if_greater(x, threshold):
 	return x
 
 def pull_up_cells_after(cells, threshold):
-		return [	[x0,decrement_if_greater(y0, threshold),
-		        	x1,decrement_if_greater(y1, threshold)] for (x0,y0,x1,y1) in cells]
+	return [	[x0,decrement_if_greater(y0, threshold),
+	        	x1,decrement_if_greater(y1, threshold)] for (x0,y0,x1,y1) in cells]
 
 def push_right_cells_after(cells, threshold):
-		return [	[increment_if_greater_or_equal(x0, threshold),y0,
-		        	increment_if_greater_or_equal(x1, threshold),y1] for (x0,y0,x1,y1) in cells]
+	return [	[increment_if_greater_or_equal(x0, threshold),y0,
+	        	increment_if_greater_or_equal(x1, threshold),y1] for (x0,y0,x1,y1) in cells]
 
 def push_down_cells_after(cells, threshold):
-		return [	[x0,increment_if_greater_or_equal(y0, threshold),
-		        	x1,increment_if_greater_or_equal(y1, threshold)] for (x0,y0,x1,y1) in cells]
+	return [	[x0,increment_if_greater_or_equal(y0, threshold),
+	        	x1,increment_if_greater_or_equal(y1, threshold)] for (x0,y0,x1,y1) in cells]
 
 def pull_left_cells_after(cells, threshold):
-		return [	[decrement_if_greater(x0, threshold),y0,
-		        	decrement_if_greater(x1, threshold),y1] for (x0,y0,x1,y1) in cells]
+	return [	[decrement_if_greater(x0, threshold),y0,
+	        	decrement_if_greater(x1, threshold),y1] for (x0,y0,x1,y1) in cells]
+
+def opposite_direction(direction):
+	opposites = {"up":"down", "right":"left", "down":"up", "left":"right"}
+	return opposites[direction]
 
 def cells_adjacent_to_cell_in_direction(cells, cell, direction):
 	fn = None
@@ -56,7 +60,6 @@ class PaneCommand(sublime_plugin.WindowCommand):
 	
 	def get_layout(self):
 		layout = self.window.get_layout()
-		print(layout)
 		cells = layout["cells"]
 		rows = layout["rows"]
 		cols = layout["cols"]
@@ -172,7 +175,6 @@ class PaneCommand(sublime_plugin.WindowCommand):
 			rows.append(rows[i] + (current_row_height if i == current_row else other_row_height))
 
 		layout = {"cols": cols, "rows": rows, "cells": cells}
-		print(layout)
 		fixed_set_layout(window, layout)
 
 	def unzoom_pane(self):
@@ -195,7 +197,6 @@ class PaneCommand(sublime_plugin.WindowCommand):
 			rows.append(rows[i] + row_height)
 
 		layout = {"cols": cols, "rows": rows, "cells": cells}
-		print(layout)
 		fixed_set_layout(window, layout)
 
 	def create_pane(self, direction):
@@ -228,10 +229,39 @@ class PaneCommand(sublime_plugin.WindowCommand):
 			cells.insert(current_group, focused_cell)
 			cells.append(unfocused_cell)
 			layout = {"cols": cols, "rows": rows, "cells": cells}
-			print(layout)
 			fixed_set_layout(window, layout)
 	
+	def destroy_current_pane(self):
+		#Out of the four adjacent panes, one was split to create this pane.
+		#Find out which one, move to it, then destroy this pane.
+		cells = self.get_cells()
+		
+		current = cells[self.window.active_group()]
+		choices = {}
+		choices["up"] = self.adjacent_cell("up")
+		choices["right"] = self.adjacent_cell("right")
+		choices["down"] = self.adjacent_cell("down")
+		choices["left"] = self.adjacent_cell("left")
+		
+		target_dir = None
+		for dir,c in choices.items():
+			if not c:
+				continue
+			if dir in ["up", "down"]:
+				if c[XMIN] == current[XMIN] and c[XMAX] == current[XMAX]:
+					target_dir = dir
+			elif dir in ["left", "right"]:
+				if c[YMIN] == current[YMIN] and c[YMAX] == current[YMAX]:
+					target_dir = dir
+		if target_dir:
+			self.travel_to_pane(target_dir)
+			self.destroy_pane(opposite_direction(target_dir))
+	
 	def destroy_pane(self, direction):
+		if direction == "self":
+			self.destroy_current_pane()
+			return
+		
 		window = self.window
 		rows, cols, cells = self.get_layout()
 		current_group = window.active_group()
@@ -240,7 +270,6 @@ class PaneCommand(sublime_plugin.WindowCommand):
 		current_cell = cells[current_group]
 		
 		adjacent_cells = cells_adjacent_to_cell_in_direction(cells, current_cell, direction)
-		print("number adjacent: ", len(adjacent_cells))
 		if len(adjacent_cells) == 1:
 			cell_to_remove = adjacent_cells[0]
 		
@@ -281,7 +310,6 @@ class PaneCommand(sublime_plugin.WindowCommand):
 				cells = pull_left_cells_after(cells, cell_to_remove[XMAX])
 			
 			layout = {"cols": cols, "rows": rows, "cells": cells}
-			print(layout)
 			fixed_set_layout(window, layout)
 
 
@@ -314,7 +342,6 @@ class UnzoomPaneCommand(PaneCommand):
 
 class CreatePaneCommand(PaneCommand):
 	def run(self, direction):
-		print("creating")
 		self.create_pane(direction)
 
 
@@ -322,6 +349,16 @@ class DestroyPaneCommand(PaneCommand):
 	def run(self, direction):
 		self.destroy_pane(direction)
 
+
+class AutoCloseEmptyPanes(sublime_plugin.EventListener):
+	def on_close(self, view):
+		auto_close = view.settings().get("origami_auto_close_empty_panes", False)
+		if not auto_close:
+			return
+		window = sublime.active_window()
+		active_group = window.active_group()
+		if len(window.views_in_group(active_group)) == 0:
+			window.run_command("destroy_pane", args={"direction":"self"})
 
 class AutoZoomOnFocus(sublime_plugin.EventListener):
 	running = False
@@ -339,7 +376,6 @@ class AutoZoomOnFocus(sublime_plugin.EventListener):
 		self.running = False
 	
 	def on_activated(self, view):
-		print(self.running)
 		if self.running:
 			return
 		fraction = view.settings().get("origami_auto_zoom_on_focus", False)

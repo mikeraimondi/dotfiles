@@ -125,20 +125,16 @@ directory for rspec-1.
 There are lots of ways to configure TextMate to work with `rvm`,
 but this is the one the we recommend:
 
-First, copy the following into` ~/.rvm/bin/textmate_ruby`
-
-    #!/usr/bin/env sh
-    source ~/.rvm/scripts/rvm
-    cd .
-    exec ruby "$@"
+With rvm installed, take the full path to `rvm-auto-ruby`, 
+found via: `which rvm-auto-ruby`
 
 Next, set up a `TM_RUBY` option in
 `TextMate/Preferences/Advanced/Shell Variables` that points to the
-`textmate_ruby` command.
+`rvm-auto-ruby` command.
 
 Learn more at:
 
-* [http://beginrescueend.com/integration/textmate/](http://beginrescueend.com/integration/textmate/)
+* [http://rvm.io/integration/textmate](http://rvm.io/integration/textmate)
 * [http://groups.google.com/group/rubyversionmanager/browse_thread/thread/64b84bbcdf49e9b?fwc=1&pli=1](http://groups.google.com/group/rubyversionmanager/browse_thread/thread/64b84bbcdf49e9b?fwc=1&pli=1)
 
 ## History
