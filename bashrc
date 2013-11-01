@@ -147,3 +147,8 @@ PATH=$PATH:$HOME/.rvm/bin # Add RVM to PATH for scripting
 if test -f ~/.rvm/scripts/rvm; then
     [ "$(type -t rvm)" = "function" ] || source ~/.rvm/scripts/rvm
 fi
+
+# Load Git completion
+if [ -f ~/.git-completion.bash ]; then
+  . ~/.git-completion.bash
+fi
