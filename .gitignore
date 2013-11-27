@@ -4,3 +4,5 @@ config/xbuild
 config/stetic
 *.last-run
 *.cache
+config/git
+config/direnv

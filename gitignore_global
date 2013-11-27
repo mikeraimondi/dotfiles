@@ -1,6 +1,8 @@
 # OS generated files #
 _Store
 .DS_Store
+.AppleDouble
+.LSOverride
 ._*
 .Spotlight-V100
 .Trashes

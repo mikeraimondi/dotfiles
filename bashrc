@@ -126,9 +126,6 @@ fi
 # Install liquidprompt
 source ~/dotfiles/liquidprompt/liquidprompt
 
-# Set port number for development
-export PORT=3000
-
 export PATH="/usr/local/bin:$PATH"
 
 # Add global NPM packages to path
@@ -137,6 +134,11 @@ export PATH="/usr/local/share/npm/bin:$PATH"
 ### Added by the Heroku Toolbelt
 export PATH="/usr/local/heroku/bin:$PATH"
 
+# Load Git completion
+if [ -f ~/.git-completion.bash ]; then
+  . ~/.git-completion.bash
+fi
+
 PATH=$PATH:$HOME/.rvm/bin # Add RVM to PATH for scripting
 
 # Source RVM
@@ -144,7 +146,5 @@ if test -f ~/.rvm/scripts/rvm; then
     [ "$(type -t rvm)" = "function" ] || source ~/.rvm/scripts/rvm
 fi
 
-# Load Git completion
-if [ -f ~/.git-completion.bash ]; then
-  . ~/.git-completion.bash
-fi
+# Load Direnv
+eval "$(direnv hook $0)"

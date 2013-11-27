@@ -9,3 +9,4 @@ install jsl
 install node
 install openssl
 install phantomjs
+install direnv
