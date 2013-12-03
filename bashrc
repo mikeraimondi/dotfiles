@@ -124,7 +124,9 @@ if [ -f /usr/local/bin/subl ]; then
 fi
 
 # Install liquidprompt
-source ~/dotfiles/liquidprompt/liquidprompt
+if [ -f $(brew --prefix)/bin/liquidprompt ]; then
+. $(brew --prefix)/bin/liquidprompt
+fi
 
 export PATH="/usr/local/bin:$PATH"
 

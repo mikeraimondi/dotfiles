@@ -10,3 +10,4 @@ install node
 install openssl
 install phantomjs
 install direnv
+install liquidprompt
