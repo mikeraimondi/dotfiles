@@ -39,4 +39,4 @@
 	url = https://github.com/altercation/vim-colors-solarized.git
 [submodule "githooks"]
 	path = githooks
-	url = git@github.com:chronophasiac/githooks.git
+	url = https://github.com/bobgilmore/githooks.git
