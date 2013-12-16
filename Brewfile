@@ -11,3 +11,5 @@ install openssl
 install phantomjs
 install direnv
 install liquidprompt
+install rbenv
+install ruby-build

@@ -141,12 +141,8 @@ if [ -f ~/.git-completion.bash ]; then
   . ~/.git-completion.bash
 fi
 
-PATH=$PATH:$HOME/.rvm/bin # Add RVM to PATH for scripting
-
-# Source RVM
-if test -f ~/.rvm/scripts/rvm; then
-    [ "$(type -t rvm)" = "function" ] || source ~/.rvm/scripts/rvm
-fi
+# Load rbenv shims and autocompletion
+if which rbenv > /dev/null; then eval "$(rbenv init -)"; fi
 
 # Load Direnv
 eval "$(direnv hook $0)"

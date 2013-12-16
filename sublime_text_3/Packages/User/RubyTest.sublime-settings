@@ -1,5 +1,4 @@
 {
-  "check_for_bundler": false,
-  "check_for_rvm": true,
+  "check_for_rbenv": true,
   "check_for_spring": true
 }
