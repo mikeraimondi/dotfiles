@@ -141,8 +141,5 @@ if [ -f ~/.git-completion.bash ]; then
   . ~/.git-completion.bash
 fi
 
-# Load rbenv shims and autocompletion
-if which rbenv > /dev/null; then eval "$(rbenv init -)"; fi
-
 # Load Direnv
 eval "$(direnv hook $0)"
