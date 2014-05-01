@@ -19,6 +19,9 @@ class Coffeelint(Linter):
 
     syntax = ('coffeescript', 'coffeescript_literate')
     executable = 'coffeelint'
+    version_args = '--version'
+    version_re = r'(?P<version>\d+\.\d+\.\d+)'
+    version_requirement = '>= 1.0'
     regex = (
         r'^<issue line="(?P<line>\d+)"\s*\r?\n'
         r'\s*lineEnd="\d+"\s*\r?\n'
@@ -26,13 +29,14 @@ class Coffeelint(Linter):
     )
     multiline = True
     comment_re = r'\s*#'
+    config_file = ('-f', 'coffeelint.json', '~')
 
     def cmd(self):
         """Return a tuple with the command line to execute."""
 
-        result = [self.executable_path, '--jslint', '--stdin']
+        command = [self.executable_path, '--jslint', '--stdin']
 
         if persist.get_syntax(self.view) == 'coffeescript_literate':
-            result.append('--literate')
+            command.append('--literate')
 
-        return result
+        return command

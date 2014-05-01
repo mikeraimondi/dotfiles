@@ -124,22 +124,11 @@ if [ -f /usr/local/bin/subl ]; then
 fi
 
 # Install liquidprompt
-if [ -f $(brew --prefix)/bin/liquidprompt ]; then
-. $(brew --prefix)/bin/liquidprompt
-fi
-
-export PATH="/usr/local/bin:$PATH"
-
-# Add global NPM packages to path
-export PATH="/usr/local/share/npm/bin:$PATH"
-
-### Added by the Heroku Toolbelt
-export PATH="/usr/local/heroku/bin:$PATH"
-
+  if [ -f /usr/local/share/liquidprompt ]; then
+    . /usr/local/share/liquidprompt
+  fi
+  
 # Load Git completion
 if [ -f ~/.git-completion.bash ]; then
   . ~/.git-completion.bash
 fi
-
-# Load Direnv
-eval "$(direnv hook $0)"

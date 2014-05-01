@@ -10,7 +10,7 @@
 
 """This module exports the CSSLint plugin linter class."""
 
-from SublimeLinter.lint import Linter
+from SublimeLinter.lint import Linter, util
 
 
 class CSSLint(Linter):
@@ -19,6 +19,9 @@ class CSSLint(Linter):
 
     syntax = ('css', 'html')
     cmd = 'csslint --format=compact'
+    version_args = '--version'
+    version_re = r'v(?P<version>\d+\.\d+\.\d+)'
+    version_requirement = '>= 0.10'
     regex = r'''(?xi)
         ^.+:\s*   # filename
 
@@ -26,9 +29,10 @@ class CSSLint(Linter):
         # in which case there is no line/col information, so that
         # part is optional.
         (?:line\ (?P<line>\d+),\ col\ (?P<col>\d+),\ )?
-        (?:(?P<error>error)|(?P<warning>warning))\ -\ (?P<message>.*)$
+        (?:(?P<error>error)|(?P<warning>warning))\ -\ (?P<message>.*)
     '''
     word_re = r'^([#\.]?[-\w]+)'
+    error_stream = util.STREAM_STDOUT
     tempfile_suffix = 'css'
     selectors = {
         'html': 'source.css.embedded.html'

@@ -1,3 +1,4 @@
+# [sublimelinter flake8-ignore:F401]
 #
 # lint.__init__
 # Part of SublimeLinter3, a code checking framework for Sublime Text 3
@@ -10,8 +11,6 @@
 
 """This module exports the linter classes and the highlight, linter, persist and util submodules."""
 
-from .linter import Linter, PythonLinter
-
 from . import (
     highlight,
     linter,
@@ -19,11 +18,6 @@ from . import (
     util,
 )
 
-__all__ = [
-    'highlight',
-    'Linter',
-    'PythonLinter',
-    'linter',
-    'persist',
-    'util',
-]
+from .linter import Linter
+from .python_linter import PythonLinter
+from .ruby_linter import RubyLinter

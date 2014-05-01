@@ -1,14 +1,22 @@
 SublimeLinter-ruby
 =========================
 
-This linter plugin for [SublimeLinter](https://github.com/SublimeLinter/SublimeLinter3) provides an interface to linting via [ruby -wc](https://www.ruby-lang.org). It will be used with files that have the “Ruby” syntax.
+[![Build Status](https://khancdn.eu/badges.php?service=https%3A%2F%2Ftravis-ci.org%2FSublimeLinter%2FSublimeLinter-ruby.png%3Fbranch%3Dmaster)](https://travis-ci.org/SublimeLinter/SublimeLinter-ruby)
+
+This linter plugin for [SublimeLinter](http://sublimelinter.readthedocs.org) provides an interface to linting via [ruby -wc](https://www.ruby-lang.org). It will be used with files that have the “Ruby” syntax.
 
 ## Installation
+SublimeLinter 3 must be installed in order to use this plugin. If SublimeLinter 3 is not installed, please follow the instructions [here](http://sublimelinter.readthedocs.org/en/latest/installation.html).
 
 ### Linter installation
 Before installing this plugin, you must ensure that `ruby` is installed on your system. On Mac OS X and Linux, `ruby` comes preinstalled. On Windows, follow the instructions on the [Ruby site](https://www.ruby-lang.org/en/downloads/).
 
-Once Ruby is installed, you can proceed to install the SublimeLinter-ruby plugin.
+If you are using `rvm` or `rbenv`, ensure that they are loaded in your shell’s “profile” file. See [here](http://sublimelinter.readthedocs.org/en/latest/troubleshooting.html#shell-startup-files) for more information.
+
+### Linter configuration
+In order for `ruby` to be executed by SublimeLinter, you must ensure that its path is available to SublimeLinter. Before going any further, please read and follow the steps in [“Finding a linter executable”](http://sublimelinter.readthedocs.org/en/latest/troubleshooting.html#finding-a-linter-executable) through “Validating your PATH” in the documentation.
+
+Once `ruby` is installed and configured, you can proceed to install the SublimeLinter-ruby plugin if it is not yet installed.
 
 ### Plugin installation
 Please use [Package Control](https://sublime.wbond.net/installation) to install the linter plugin. This will ensure that the plugin will be updated when new versions are available. If you want to install from source so you can modify the source code, you probably know what you are doing so we won’t cover that here.
@@ -20,7 +28,7 @@ To install via Package Control, do the following:
 1. When the plugin list appears, type `ruby`. Among the entries you should see `SublimeLinter-ruby`. If that entry is not highlighted, use the keyboard or mouse to select it.
 
 ## Settings
-For general information on how SublimeLinter works with settings, please see [Settings](https://github.com/SublimeLinter/SublimeLinter.github.io/wiki/Settings). For information on generic linter settings, please see [Linter Settings](https://github.com/SublimeLinter/SublimeLinter.github.io/wiki/Linter-Settings).
+For general information on how SublimeLinter works with settings, please see [Settings](http://sublimelinter.readthedocs.org/en/latest/settings.html). For information on generic linter settings, please see [Linter Settings](http://sublimelinter.readthedocs.org/en/latest/linter_settings.html).
 
 ## Contributing
 If you would like to contribute enhancements or fixes, please do the following:

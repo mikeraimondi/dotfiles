@@ -15,9 +15,11 @@ import datetime
 from fnmatch import fnmatch
 import json
 import os
+import re
 import shutil
 import subprocess
 import tempfile
+from textwrap import TextWrapper
 from threading import Thread
 import time
 
@@ -62,9 +64,30 @@ class SublimelinterLintCommand(sublime_plugin.TextCommand):
     """A command that lints the current view if it has a linter."""
 
     def is_enabled(self):
-        """Return True if the current view has a linter and the lint mode is not "background"."""
+        """
+        Return True if the current view can be linted.
+
+        If the view has *only* file-only linters, it can be linted
+        only if the view is not dirty.
+
+        Otherwise it can be linted.
+
+        """
+
+        has_non_file_only_linter = False
+
         vid = self.view.id()
-        return vid in persist.view_linters and persist.settings.get('lint_mode') != 'background'
+        linters = persist.view_linters.get(vid, [])
+
+        for lint in linters:
+            if lint.tempfile_suffix != '-':
+                has_non_file_only_linter = True
+                break
+
+        if not has_non_file_only_linter:
+            return not self.view.is_dirty()
+
+        return True
 
     def run(self, edit):
         """Lint the current view."""
@@ -148,22 +171,26 @@ class GotoErrorCommand(sublime_plugin.TextCommand):
     @classmethod
     def select_lint_region(cls, view, region):
         """
-        Select the first marked region that contains region.
+        Select and scroll to the first marked region that contains region.
 
-        If none are found, the cursor is placed at the beginning of region.
+        If none are found, the beginning of region is used. The view is
+        centered on the calculated region and the region is selected.
 
         """
-
-        sel = view.sel()
-        sel.clear()
 
         marked_region = cls.find_mark_within(view, region)
 
         if marked_region is None:
             marked_region = sublime.Region(region.begin(), region.begin())
 
+        sel = view.sel()
+        sel.clear()
         sel.add(marked_region)
-        view.show_at_center(marked_region)
+
+        # There is a bug in ST3 that prevents the selection from changing
+        # when a quick panel is open and the viewport does not change position,
+        # so we call our own custom method that works around that.
+        util.center_region_in_view(marked_region, view)
 
     @classmethod
     def find_mark_within(cls, view, region):
@@ -231,106 +258,100 @@ class SublimelinterShowAllErrors(sublime_plugin.TextCommand):
                 code = visible_line[:column] + '➜' + visible_line[column:]
                 options.append(['{}  {}'.format(lineno + 1, message), code])
 
-        view.window().show_quick_panel(options, self.select_error)
+        self.viewport_pos = view.viewport_position()
+        self.selection = list(view.sel())
+
+        view.window().show_quick_panel(
+            options,
+            on_select=self.select_error,
+            on_highlight=self.select_error
+        )
 
     def select_error(self, index):
         """Completion handler for the quick panel. Selects the indexed error."""
         if index != -1:
             point = self.points[index]
             GotoErrorCommand.select_lint_region(self.view, sublime.Region(point, point))
-
-
-class ToggleSettingCommand(sublime_plugin.WindowCommand):
-
-    """Abstract base class for commands that toggle a setting."""
-
-    def is_enabled(self):
-        """Return True if the opposite of self.setting is True."""
-        setting = persist.settings.get(self.setting, None)
-        return setting is not None and setting is not self.value
-
-    def set(self):
-        """Toggle the setting if self.value is boolean, or remove it if None."""
-
-        if self.value is None:
-            persist.settings.pop(self.setting)
         else:
-            persist.settings.set(self.setting, self.value)
+            self.view.set_viewport_position(self.viewport_pos)
+            self.view.sel().clear()
+            self.view.sel().add_all(self.selection)
+
+
+class SublimelinterToggleSettingCommand(sublime_plugin.WindowCommand):
+
+    """Command that toggles a setting."""
+
+    def __init__(self, window):
+        """Initialize a new instance."""
+        super().__init__(window)
+
+    def is_visible(self, **args):
+        """Return True if the opposite of the setting is True."""
+        if args.get('checked', False):
+            return True
+
+        if persist.settings.has_setting(args['setting']):
+            setting = persist.settings.get(args['setting'], None)
+            return setting is not None and setting is not args['value']
+        else:
+            return args['value'] is not None
+
+    def is_checked(self, **args):
+        """Return True if the setting should be checked."""
+        if args.get('checked', False):
+            setting = persist.settings.get(args['setting'], False)
+            return setting is True
+        else:
+            return False
+
+    def run(self, **args):
+        """Toggle the setting if value is boolean, or remove it if None."""
+
+        if 'value' in args:
+            if args['value'] is None:
+                persist.settings.pop(args['setting'])
+            else:
+                persist.settings.set(args['setting'], args['value'], changed=True)
+        else:
+            setting = persist.settings.get(args['setting'], False)
+            persist.settings.set(args['setting'], not setting, changed=True)
 
         persist.settings.save()
-
-
-def toggle_setting_command(setting, value):
-    """Return a decorator that provides the run method for concrete subclasses of ToggleSettingCommand."""
-
-    def decorator(cls):
-        def run(self):
-            """Run the command."""
-            self.set()
-
-        cls.setting = setting
-        cls.value = value
-        cls.run = run
-        return cls
-
-    return decorator
-
-
-@toggle_setting_command('show_errors_on_save', True)
-class SublimelinterShowErrorsOnSaveCommand(ToggleSettingCommand):
-
-    """A command that sets the "show_errors_on_save" setting to True."""
-
-    pass
-
-
-@toggle_setting_command('show_errors_on_save', False)
-class SublimelinterDontShowErrorsOnSaveCommand(ToggleSettingCommand):
-
-    """A command that sets the "show_errors_on_save" setting to False."""
-
-    pass
-
-
-@toggle_setting_command('@disable', True)
-class SublimelinterDisableLintingCommand(ToggleSettingCommand):
-
-    """A command that sets the "@disable" setting to True."""
-
-    pass
-
-
-@toggle_setting_command('@disable', None)
-class SublimelinterDontDisableLintingCommand(ToggleSettingCommand):
-
-    """A command that remove the "@disable" setting."""
-
-    pass
-
-
-@toggle_setting_command('debug', True)
-class SublimelinterEnableDebugCommand(ToggleSettingCommand):
-
-    """A command that sets the "debug" setting to True."""
-
-    pass
-
-
-@toggle_setting_command('debug', False)
-class SublimelinterDisableDebugCommand(ToggleSettingCommand):
-
-    """A command that sets the "debug" setting to False."""
-
-    pass
 
 
 class ChooseSettingCommand(sublime_plugin.WindowCommand):
 
     """An abstract base class for commands that choose a setting from a list."""
 
-    def __init__(self, window, setting=None):
+    def __init__(self, window, setting=None, preview=False):
+        """Initialize a new instance."""
         super().__init__(window)
         self.setting = setting
+        self._settings = None
+        self.preview = preview
+
+    def description(self, **args):
+        """Return the visible description of the command, used in menus."""
+        return args.get('value', None)
+
+    def is_checked(self, **args):
+        """Return whether this command should be checked in a menu."""
+        if 'value' not in args:
+            return False
+
+        item = self.transform_setting(args['value'], matching=True)
+        setting = self.setting_value(matching=True)
+        return item == setting
+
+    def _get_settings(self):
+        """Return the list of settings."""
+        if self._settings is None:
+            self._settings = self.get_settings()
+
+        return self._settings
+
+    settings = property(_get_settings)
 
     def get_settings(self):
         """Return the list of settings. Subclasses must override this."""
@@ -345,6 +366,15 @@ class ChooseSettingCommand(sublime_plugin.WindowCommand):
         """
         return setting.lower()
 
+    def setting_value(self, matching=False):
+        """Return the current value of the setting."""
+        return self.transform_setting(persist.settings.get(self.setting, ''), matching=matching)
+
+    def on_highlight(self, index):
+        """If preview is on, set the selected setting."""
+        if self.preview:
+            self.set(index)
+
     def choose(self, **kwargs):
         """
         Choose or set the setting.
@@ -356,12 +386,10 @@ class ChooseSettingCommand(sublime_plugin.WindowCommand):
 
         """
 
-        self.settings = self.get_settings()
-
         if 'value' in kwargs:
             setting = self.transform_setting(kwargs['value'])
         else:
-            setting = self.transform_setting(persist.settings.get(self.setting), matching=True)
+            setting = self.setting_value(matching=True)
 
         index = 0
 
@@ -378,15 +406,23 @@ class ChooseSettingCommand(sublime_plugin.WindowCommand):
         if 'value' in kwargs:
             self.set(index)
         else:
-            self.window.show_quick_panel(self.settings, self.set, selected_index=index)
+            self.previous_setting = self.setting_value()
+
+            self.window.show_quick_panel(
+                self.settings,
+                on_select=self.set,
+                selected_index=index,
+                on_highlight=self.on_highlight)
 
     def set(self, index):
         """Set the value of the setting."""
 
         if index == -1:
+            if self.settings_differ(self.previous_setting, self.setting_value()):
+                self.update_setting(self.previous_setting)
+
             return
 
-        old_setting = persist.settings.get(self.setting)
         setting = self.selected_setting(index)
 
         if isinstance(setting, (tuple, list)):
@@ -394,12 +430,24 @@ class ChooseSettingCommand(sublime_plugin.WindowCommand):
 
         setting = self.transform_setting(setting)
 
-        if setting == old_setting:
+        if not self.settings_differ(persist.settings.get(self.setting, ''), setting):
             return
 
-        persist.settings.set(self.setting, setting)
-        self.setting_was_changed(setting)
+        self.update_setting(setting)
+
+    def update_setting(self, value):
+        """Update the setting with the given value."""
+        persist.settings.set(self.setting, value, changed=True)
+        self.setting_was_changed(value)
         persist.settings.save()
+
+    def settings_differ(self, old_setting, new_setting):
+        """Return whether two setting values differ."""
+        if isinstance(new_setting, (tuple, list)):
+            new_setting = new_setting[0]
+
+        new_setting = self.transform_setting(new_setting)
+        return new_setting != old_setting
 
     def selected_setting(self, index):
         """
@@ -423,12 +471,12 @@ class ChooseSettingCommand(sublime_plugin.WindowCommand):
         pass
 
 
-def choose_setting_command(setting):
+def choose_setting_command(setting, preview):
     """Return a decorator that provides common methods for concrete subclasses of ChooseSettingCommand."""
 
     def decorator(cls):
         def init(self, window):
-            super(cls, self).__init__(window, setting)
+            super(cls, self).__init__(window, setting, preview)
 
         def run(self, **kwargs):
             """Run the command."""
@@ -442,7 +490,7 @@ def choose_setting_command(setting):
     return decorator
 
 
-@choose_setting_command('lint_mode')
+@choose_setting_command('lint_mode', preview=False)
 class SublimelinterChooseLintModeCommand(ChooseSettingCommand):
 
     """A command that selects a lint mode from a list."""
@@ -460,7 +508,7 @@ class SublimelinterChooseLintModeCommand(ChooseSettingCommand):
             linter.Linter.clear_all()
 
 
-@choose_setting_command('mark_style')
+@choose_setting_command('mark_style', preview=True)
 class SublimelinterChooseMarkStyleCommand(ChooseSettingCommand):
 
     """A command that selects a mark style from a list."""
@@ -470,7 +518,7 @@ class SublimelinterChooseMarkStyleCommand(ChooseSettingCommand):
         return highlight.mark_style_names()
 
 
-@choose_setting_command('gutter_theme')
+@choose_setting_command('gutter_theme', preview=True)
 class SublimelinterChooseGutterThemeCommand(ChooseSettingCommand):
 
     """A command that selects a gutter theme from a list."""
@@ -584,12 +632,83 @@ class SublimelinterChooseGutterThemeCommand(ChooseSettingCommand):
             return setting
 
 
+class SublimelinterToggleLinterCommand(sublime_plugin.WindowCommand):
+
+    """A command that toggles, enables, or disables linter plugins."""
+
+    def __init__(self, window):
+        """Initialize a new instance."""
+        super().__init__(window)
+        self.linters = {}
+
+    def is_visible(self, **args):
+        """Return True if the command would show any linters."""
+        which = args['which']
+
+        if self.linters.get(which) is None:
+            linters = []
+            settings = persist.settings.get('linters', {})
+
+            for instance in persist.linter_classes:
+                linter_settings = settings.get(instance, {})
+                disabled = linter_settings.get('@disable')
+
+                if which == 'all':
+                    include = True
+                    instance = [instance, 'disabled' if disabled else 'enabled']
+                else:
+                    include = (
+                        which == 'enabled' and not disabled or
+                        which == 'disabled' and disabled
+                    )
+
+                if include:
+                    linters.append(instance)
+
+            linters.sort()
+            self.linters[which] = linters
+
+        return len(self.linters[which]) > 0
+
+    def run(self, **args):
+        """Run the command."""
+        self.which = args['which']
+
+        if self.linters[self.which]:
+            self.window.show_quick_panel(self.linters[self.which], self.on_done)
+
+    def on_done(self, index):
+        """Completion handler for quick panel, toggle the enabled state of the chosen linter."""
+        if index != -1:
+            linter = self.linters[self.which][index]
+
+            if isinstance(linter, list):
+                linter = linter[0]
+
+            settings = persist.settings.get('linters', {})
+            linter_settings = settings.get(linter, {})
+            linter_settings['@disable'] = not linter_settings.get('@disable', False)
+            persist.settings.set('linters', settings, changed=True)
+            persist.settings.save()
+
+        self.linters = {}
+
+
 class SublimelinterCreateLinterPluginCommand(sublime_plugin.WindowCommand):
 
     """A command that creates a new linter plugin."""
 
     def run(self):
         """Run the command."""
+        if not sublime.ok_cancel_dialog(
+            'You will be asked for the linter name. Please enter the name '
+            'of the linter binary (including dashes), NOT the name of the language being linted. '
+            'For example, to lint CSS with csslint, the linter name is '
+            '“csslint”, NOT “css”.',
+            'I understand'
+        ):
+            return
+
         self.window.show_input_panel(
             'Linter name:',
             '',
@@ -600,8 +719,8 @@ class SublimelinterCreateLinterPluginCommand(sublime_plugin.WindowCommand):
     def copy_linter(self, name):
         """Copy the template linter to a new linter with the given name."""
 
-        self.name = name = name.lower()
-        self.fullname = 'SublimeLinter-{}'.format(name)
+        self.name = name
+        self.fullname = 'SublimeLinter-contrib-{}'.format(name)
         self.dest = os.path.join(sublime.packages_path(), self.fullname)
 
         if os.path.exists(self.dest):
@@ -631,7 +750,8 @@ class SublimelinterCreateLinterPluginCommand(sublime_plugin.WindowCommand):
             if language is None:
                 return
 
-            self.fill_template(self.temp_dir, self.name, self.fullname, language)
+            if not self.fill_template(self.temp_dir, self.name, self.fullname, language):
+                return
 
             git = util.which('git')
 
@@ -666,51 +786,56 @@ class SublimelinterCreateLinterPluginCommand(sublime_plugin.WindowCommand):
         self.window.show_quick_panel(items, on_done)
 
     def fill_template(self, template_dir, name, fullname, language):
+        """Replace placeholders and fill template files in template_dir, return success."""
+
+        # Read per-language info
+        path = os.path.join(os.path.dirname(__file__), 'create_linter_info.json')
+
+        with open(path, mode='r', encoding='utf-8') as f:
+            try:
+                info = json.load(f)
+            except Exception as err:
+                persist.printf(err)
+                sublime.error_message('A configuration file could not be opened, the linter cannot be created.')
+                return False
+
+        info = info.get(language, {})
         extra_attributes = []
+        comment_re = info.get('comment_re', 'None')
+        extra_attributes.append('comment_re = ' + comment_re)
 
-        comment_regexes = {
-            'python': None,
-            'javascript': 'r\'\\s*/[/*]\'',
-            'ruby': 'r\'\\s*#\'',
-            'other': 'None'
-        }
+        attributes = info.get('attributes', [])
 
-        comment_re = comment_regexes[language]
-
-        if comment_re:
-            extra_attributes.append('comment_re = ' + comment_re)
-
-        if language == 'python':
-            extra_attributes.append('module = \'{}\'\n    check_version = False'.format(name))
+        for attr in attributes:
+            extra_attributes.append(attr.format(name))
 
         extra_attributes = '\n    '.join(extra_attributes)
 
         if extra_attributes:
             extra_attributes += '\n'
 
-        installers = {
-            'python': 'pip install {}',
-            'javascript': 'npm install -g {}',
-            'ruby': 'gem install {}',
-            'other': '<package manager> install {}'
-        }
+        extra_steps = info.get('extra_steps', '')
 
-        if language == 'javascript':
-            platform = '[Node.js](http://nodejs.org)'
-        else:
-            platform = language.capitalize()
+        if isinstance(extra_steps, list):
+            extra_steps = '\n\n'.join(extra_steps)
+
+        if extra_steps:
+            extra_steps = '\n' + extra_steps + '\n'
+
+        platform = info.get('platform', language.capitalize())
 
         # Replace placeholders
         placeholders = {
             '__linter__': name,
             '__user__': util.get_user_fullname(),
             '__year__': str(datetime.date.today().year),
-            '__class__': name.capitalize(),
-            '__superclass__': 'PythonLinter' if language == 'python' else 'Linter',
+            '__class__': self.camel_case(name),
+            '__superclass__': info.get('superclass', 'Linter'),
             '__cmd__': '{}@python'.format(name) if language == 'python' else name,
             '__extra_attributes__': extra_attributes,
             '__platform__': platform,
-            '__install__': installers[language].format(name)
+            '__install__': info['installer'].format(name),
+            '__extra_install_steps__': extra_steps
         }
 
         for root, dirs, files in os.walk(template_dir):
@@ -728,6 +853,24 @@ class SublimelinterCreateLinterPluginCommand(sublime_plugin.WindowCommand):
 
                     with open(path, mode='w', encoding='utf-8') as f:
                         f.write(text)
+
+        return True
+
+    def camel_case(self, name):
+        """Convert and return a name in the form foo-bar to FooBar."""
+        camel_name = name[0].capitalize()
+        i = 1
+
+        while i < len(name):
+            if name[i] == '-' and i < len(name) - 1:
+                camel_name += name[i + 1].capitalize()
+                i += 1
+            else:
+                camel_name += name[i]
+
+            i += 1
+
+        return camel_name
 
     def wait_for_open(self, dest):
         """Wait for new linter window to open in another thread."""
@@ -755,6 +898,200 @@ class SublimelinterCreateLinterPluginCommand(sublime_plugin.WindowCommand):
         sublime.set_timeout_async(open_linter_py, 0)
 
 
+class SublimelinterPackageControlCommand(sublime_plugin.WindowCommand):
+
+    """
+    Abstract superclass for Package Control utility commands.
+
+    Only works if git is installed.
+
+    """
+
+    TAG_RE = re.compile(r'(?P<major>\d+)\.(?P<minor>\d+)\.(?P<release>\d+)(?:\+\d+)?')
+
+    def __init__(self, window):
+        """Initialize a new instance."""
+        super().__init__(window)
+        self.git = ''
+
+    def is_visible(self, paths=[]):
+        """Return True if any eligible plugin directories are selected."""
+
+        if self.git == '':
+            self.git = util.which('git')
+
+        if self.git:
+            for path in paths:
+                if self.is_eligible_path(path):
+                    return True
+
+        return False
+
+    def is_eligible_path(self, path):
+        """
+        Return True if path is an eligible directory.
+
+        A directory is eligible if it is a direct child of Packages,
+        has a messages subdirectory, and has messages.json.
+
+        """
+        packages_path = sublime.packages_path()
+
+        return (
+            os.path.isdir(path) and
+            os.path.dirname(path) == packages_path and
+            os.path.isdir(os.path.join(path, 'messages')) and
+            os.path.isfile(os.path.join(path, 'messages.json'))
+        )
+
+    def get_current_tag(self):
+        """
+        Return the most recent tag components.
+
+        A tuple of (major, minor, release) is returned, or (1, 0, 0) if there are no tags.
+        If the most recent tag does not conform to semver, return (None, None, None).
+
+        """
+
+        tag = util.communicate(['git', 'describe', '--tags', '--abbrev=0']).strip()
+
+        if not tag:
+            return (1, 0, 0)
+
+        match = self.TAG_RE.match(tag)
+
+        if match:
+            return (int(match.group('major')), int(match.group('minor')), int(match.group('release')))
+        else:
+            return None
+
+
+class SublimelinterNewPackageControlMessageCommand(SublimelinterPackageControlCommand):
+
+    """
+    This command automates the process of creating new Package Control release messages.
+
+    It creates a new entry in messages.json for the next version
+    and creates a new file named messages/<version>.txt.
+
+    """
+
+    COMMIT_MSG_RE = re.compile(r'{{{{(.+?)}}}}')
+
+    def __init__(self, window):
+        """Initialize a new instance."""
+        super().__init__(window)
+
+    def run(self, paths=[]):
+        """Run the command."""
+
+        for path in paths:
+            if self.is_eligible_path(path):
+                self.make_new_version_message(path)
+
+    def make_new_version_message(self, path):
+        """Make a new version message for the repo at the given path."""
+
+        try:
+            cwd = os.getcwd()
+            os.chdir(path)
+
+            version = self.get_current_tag()
+
+            if version[0] is None:
+                return
+
+            messages_path = os.path.join(path, 'messages.json')
+            message_path = self.rewrite_messages_json(messages_path, version)
+
+            if os.path.exists(message_path):
+                os.remove(message_path)
+
+            with open(message_path, mode='w', encoding='utf-8') as f:
+                header = '{} {}'.format(
+                    os.path.basename(path),
+                    os.path.splitext(os.path.basename(message_path))[0])
+                f.write('{}\n{}\n'.format(header, '-' * (len(header) + 1)))
+                f.write(self.get_commit_messages_since(version))
+
+            self.window.run_command('open_file', args={'file': message_path})
+
+        except Exception:
+            import traceback
+            traceback.print_exc()
+        finally:
+            os.chdir(cwd)
+
+    def rewrite_messages_json(self, messages_path, tag):
+        """Add an entry in messages.json for tag, return relative path to the file."""
+
+        with open(messages_path, encoding='utf-8') as f:
+            messages = json.load(f)
+
+        major, minor, release = tag
+        release += 1
+        tag = '{}.{}.{}'.format(major, minor, release)
+        message_path = os.path.join('messages', '{}.txt'.format(tag))
+        messages[tag] = message_path
+        message_path = os.path.join(os.path.dirname(messages_path), message_path)
+
+        with open(messages_path, mode='w', encoding='utf-8') as f:
+            messages_json = '{\n'
+            sorted_messages = []
+
+            if 'install' in messages:
+                install_message = messages.pop('install')
+                sorted_messages.append('    "install": "{}"'.format(install_message))
+
+            keys = sorted(map(self.sortable_tag, messages.keys()))
+
+            for _, key in keys:
+                sorted_messages.append('    "{}": "{}"'.format(key, messages[key]))
+
+            messages_json += ',\n'.join(sorted_messages)
+            messages_json += '\n}\n'
+            f.write(messages_json)
+
+        return message_path
+
+    def sortable_tag(self, tag):
+        """Return a version tag in a sortable form."""
+
+        if tag == 'install':
+            return (tag, tag)
+
+        major, minor, release = tag.split('.')
+
+        if '+' in release:
+            release, update = release.split('+')
+            update = '+{:04}'.format(int(update))
+        else:
+            update = ''
+
+        return ('{:04}.{:04}.{:04}{}'.format(int(major), int(minor), int(release), update), tag)
+
+    def get_commit_messages_since(self, version):
+        """Return a formatted list of commit messages since the given tagged version."""
+
+        tag = '{}.{}.{}'.format(*version)
+        output = util.communicate([
+            'git', 'log',
+            '--pretty=format:{{{{%w(0,0,0)%s %b}}}}',
+            '--reverse', tag + '..'
+        ])
+
+        # Split the messages, they are bounded by {{{{ }}}}
+        messages = []
+
+        for match in self.COMMIT_MSG_RE.finditer(output):
+            messages.append(match.group(1).strip())
+
+        # Wrap the messages
+        wrapper = TextWrapper(initial_indent='- ', subsequent_indent='  ')
+        messages = list(map(lambda msg: '\n'.join(wrapper.wrap(msg)), messages))
+        return '\n\n'.join(messages) + '\n'
+
+
 class SublimelinterReportCommand(sublime_plugin.WindowCommand):
 
     """
@@ -771,6 +1108,9 @@ class SublimelinterReportCommand(sublime_plugin.WindowCommand):
         output = self.window.new_file()
         output.set_name('{} Error Report'.format(persist.PLUGIN_NAME))
         output.set_scratch(True)
+
+        from .sublimelinter import SublimeLinter
+        self.plugin = SublimeLinter.shared_plugin()
 
         if on == 'files' or on == 'both':
             for view in self.window.views():
@@ -795,7 +1135,7 @@ class SublimelinterReportCommand(sublime_plugin.WindowCommand):
     def report(self, output, view):
         """Write a report on the given view to output."""
 
-        def finish_lint(view, linters):
+        def finish_lint(view, linters, hit_time):
             if not linters:
                 return
 
@@ -806,18 +1146,29 @@ class SublimelinterReportCommand(sublime_plugin.WindowCommand):
                 filename = os.path.basename(linters[0].filename or 'untitled')
                 out = '\n{}:\n'.format(filename)
 
-                for linter in linters:
-                    if linter.errors:
-                        for line, errors in sorted(linter.errors.items()):
-                            for col, error_type, error in errors:
-                                out += '  {}: {}\n'.format(line, error)
+                for lint in sorted(linters, key=lambda lint: lint.name):
+                    if lint.errors:
+                        out += '\n  {}:\n'.format(lint.name)
+                        items = sorted(lint.errors.items())
+
+                        # Get the highest line number so we know how much padding numbers need
+                        highest_line = items[-1][0]
+                        width = 1
+
+                        while highest_line >= 10:
+                            highest_line /= 10
+                            width += 1
+
+                        for line, messages in items:
+                            for col, message in messages:
+                                out += '    {:>{width}}: {}\n'.format(line, message, width=width)
 
                 output.insert(edit, output.size(), out)
 
             persist.edits[output.id()].append(insert)
             output.run_command('sublimelinter_edit')
 
-        args = (view.id(), finish_lint)
+        kwargs = {'self': self.plugin, 'view_id': view.id(), 'callback': finish_lint}
 
         from .sublimelinter import SublimeLinter
-        Thread(target=SublimeLinter.lint, args=args).start()
+        Thread(target=SublimeLinter.lint, kwargs=kwargs).start()

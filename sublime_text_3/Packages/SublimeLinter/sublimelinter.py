@@ -27,6 +27,10 @@ def plugin_loaded():
 
     persist.plugin_is_loaded = True
     persist.settings.load()
+    persist.printf('debug mode:', 'on' if persist.debug_mode() else 'off')
+
+    for linter in persist.linter_classes.values():
+        linter.initialize()
 
     plugin = SublimeLinter.shared_plugin()
     queue.start(plugin.lint)
@@ -59,6 +63,7 @@ class SublimeLinter(sublime_plugin.EventListener):
         return cls.shared_instance
 
     def __init__(self, *args, **kwargs):
+        """Initialize a new instance."""
         super().__init__(*args, **kwargs)
 
         # Keeps track of which views we have assigned linters to
@@ -87,7 +92,9 @@ class SublimeLinter(sublime_plugin.EventListener):
         Lint the view with the given id.
 
         This method is called asynchronously by persist.Daemon when a lint
-        request is pulled off the queue.
+        request is pulled off the queue, or called synchronously when the
+        Lint command is executed or a file is saved and Show Errors on Save
+        is enabled.
 
         If provided, hit_time is the time at which the lint request was added
         to the queue. It is used to determine if the view has been modified
@@ -109,19 +116,10 @@ class SublimeLinter(sublime_plugin.EventListener):
         if view is None:
             return
 
-        # Build a list of regions that match the linter's selectors
-        sections = {}
-
-        for sel, _ in Linter.get_selectors(view_id):
-            sections[sel] = []
-
-            for region in view.find_by_selector(sel):
-                sections[sel].append((view.rowcol(region.a)[0], region.a, region.b))
-
         filename = view.file_name()
         code = Linter.text(view)
         callback = callback or self.highlight
-        Linter.lint_view(view_id, filename, code, sections, hit_time, callback)
+        Linter.lint_view(view, filename, code, hit_time, callback)
 
     def highlight(self, view, linters, hit_time):
         """
@@ -157,12 +155,26 @@ class SublimeLinter(sublime_plugin.EventListener):
                 for line, errs in linter.errors.items():
                     errors.setdefault(line, []).extend(errs)
 
-        highlights.clear(view)
-        highlights.draw(view)
-        persist.errors[vid] = errors
+        # Keep track of one view in each window that shares view's buffer
+        window_views = {}
+        buffer_id = view.buffer_id()
 
-        # Update the status
-        self.on_selection_modified_async(view)
+        for window in sublime.windows():
+            wid = window.id()
+
+            for other_view in window.views():
+                if other_view.buffer_id() == buffer_id:
+                    vid = other_view.id()
+                    persist.highlights[vid] = highlights
+                    highlights.clear(other_view)
+                    highlights.draw(other_view)
+                    persist.errors[vid] = errors
+
+                    if window_views.get(wid) is None:
+                        window_views[wid] = other_view
+
+        for view in window_views.values():
+            self.on_selection_modified_async(view)
 
     def hit(self, view):
         """Record an activity that could trigger a lint and enqueue a desire to lint."""
@@ -191,7 +203,7 @@ class SublimeLinter(sublime_plugin.EventListener):
         syntax = persist.get_syntax(view)
 
         # Syntax either has never been set or just changed
-        if not vid in self.view_syntax or self.view_syntax[vid] != syntax:
+        if vid not in self.view_syntax or self.view_syntax[vid] != syntax:
             self.view_syntax[vid] = syntax
             Linter.assign(view, reset=True)
             self.clear(view)
@@ -203,12 +215,31 @@ class SublimeLinter(sublime_plugin.EventListener):
         """Clear all marks, errors and status from the given view."""
         Linter.clear_view(view)
 
+    def is_scratch(self, view):
+        """
+        Return whether a view is scratch.
+
+        There is a bug (or feature) in the current ST3 where the Find panel
+        is not marked scratch but has no window.
+
+        """
+
+        return view.is_scratch() or view.window() is None
+
+    def view_has_file_only_linter(self, vid):
+        """Return True if any linters for the given view are file-only."""
+        for lint in persist.view_linters.get(vid, []):
+            if lint.tempfile_suffix == '-':
+                return True
+
+        return False
+
     # sublime_plugin.EventListener event handlers
 
     def on_modified(self, view):
         """Called when a view is modified."""
 
-        if view.is_scratch():
+        if self.is_scratch(view):
             return
 
         if view.id() not in persist.view_linters:
@@ -219,7 +250,7 @@ class SublimeLinter(sublime_plugin.EventListener):
         else:
             syntax_changed = False
 
-        if syntax_changed or persist.settings.get('lint_mode') == 'background':
+        if syntax_changed or persist.settings.get('lint_mode', 'background') == 'background':
             self.hit(view)
         else:
             self.clear(view)
@@ -227,7 +258,7 @@ class SublimeLinter(sublime_plugin.EventListener):
     def on_activated(self, view):
         """Called when a view gains input focus."""
 
-        if view.is_scratch():
+        if self.is_scratch(view):
             return
 
         # Reload the plugin settings.
@@ -236,11 +267,11 @@ class SublimeLinter(sublime_plugin.EventListener):
         self.check_syntax(view)
         view_id = view.id()
 
-        if not view_id in self.linted_views:
-            if not view_id in self.loaded_views:
+        if view_id not in self.linted_views:
+            if view_id not in self.loaded_views:
                 self.on_new(view)
 
-            if persist.settings.get('lint_mode') in ('background', 'load/save'):
+            if persist.settings.get('lint_mode', 'background') in ('background', 'load/save'):
                 self.hit(view)
 
         self.on_selection_modified_async(view)
@@ -261,6 +292,9 @@ class SublimeLinter(sublime_plugin.EventListener):
         filename = view.file_name()
 
         if not filename:
+            return False
+
+        if not filename.startswith(sublime.packages_path()):
             return False
 
         dirname, filename = os.path.split(filename)
@@ -284,17 +318,37 @@ class SublimeLinter(sublime_plugin.EventListener):
         """Called when a new buffer is created."""
         self.on_open_settings(view)
 
-        if view.is_scratch():
+        if self.is_scratch(view):
             return
 
         vid = view.id()
         self.loaded_views.add(vid)
         self.view_syntax[vid] = persist.get_syntax(view)
 
+    def get_focused_view_id(self, view):
+        """
+        Return the focused view which shares view's buffer.
+
+        When updating the status, we want to make sure we get
+        the selection of the focused view, since multiple views
+        into the same buffer may be open.
+
+        """
+        active_view = view.window().active_view()
+
+        for view in view.window().views():
+            if view == active_view:
+                return view
+
     def on_selection_modified_async(self, view):
         """Called when the selection changes (cursor moves or text selected)."""
 
-        if view.is_scratch():
+        if self.is_scratch(view):
+            return
+
+        view = self.get_focused_view_id(view)
+
+        if view is None:
             return
 
         vid = view.id()
@@ -354,7 +408,7 @@ class SublimeLinter(sublime_plugin.EventListener):
     def on_post_save(self, view):
         """Called after view is saved."""
 
-        if view.is_scratch():
+        if self.is_scratch(view):
             return
 
         # First check to see if the project settings changed
@@ -378,8 +432,8 @@ class SublimeLinter(sublime_plugin.EventListener):
             elif filename != 'SublimeLinter.sublime-settings':
                 syntax_changed = self.check_syntax(view)
                 vid = view.id()
-                mode = persist.settings.get('lint_mode')
-                show_errors = persist.settings.get('show_errors_on_save')
+                mode = persist.settings.get('lint_mode', 'background')
+                show_errors = persist.settings.get('show_errors_on_save', False)
 
                 if syntax_changed:
                     self.clear(view)
@@ -392,7 +446,11 @@ class SublimeLinter(sublime_plugin.EventListener):
                     else:
                         show_errors = False
                 else:
-                    if show_errors or mode in ('load/save', 'save only'):
+                    if (
+                        show_errors or
+                        mode in ('load/save', 'save only') or
+                        mode == 'background' and self.view_has_file_only_linter(vid)
+                    ):
                         self.lint(vid)
                     elif mode == 'manual':
                         show_errors = False
@@ -403,7 +461,7 @@ class SublimeLinter(sublime_plugin.EventListener):
     def on_close(self, view):
         """Called after view is closed."""
 
-        if view.is_scratch():
+        if self.is_scratch(view):
             return
 
         vid = view.id()
