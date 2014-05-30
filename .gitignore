@@ -6,3 +6,4 @@ config/stetic
 *.cache
 config/git
 config/direnv
+config/configstore

@@ -1,8 +1,0 @@
-<snippet>
-    <content><![CDATA[
-Backbone.Router
-]]></content>
-    <tabTrigger>br</tabTrigger>
-    <scope>source.coffee</scope>
-    <description>Backbone Router</description>
-</snippet>

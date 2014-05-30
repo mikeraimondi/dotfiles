@@ -1,8 +1,0 @@
-<snippet>
-    <content><![CDATA[
-Backbone.View
-]]></content>
-    <tabTrigger>bv</tabTrigger>
-    <scope>source.coffee</scope>
-    <description>Backbone View</description>
-</snippet>

@@ -1,8 +1,0 @@
-<snippet>
-  <content><![CDATA[
-FactoryGirl.build :${1:factory}
-]]></content>
-  <tabTrigger>fb</tabTrigger>
-  <scope>source.ruby.rspec</scope>
-  <description>FactoryGirl.build</description>
-</snippet>
