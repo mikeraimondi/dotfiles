@@ -1,6 +1,6 @@
 [user]
 	name = Michael Raimondi
-	email = zeno@pobox.com
+	email = mike@mikeraimondi.com
 [core]
 	excludesfile = ~/.gitignore_global
 	autocrlf = input
