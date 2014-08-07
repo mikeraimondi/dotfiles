@@ -3,6 +3,7 @@
 	email = zeno@pobox.com
 [core]
 	excludesfile = ~/.gitignore_global
+	autocrlf = input
 [push]
 	default = tracking
 [color]

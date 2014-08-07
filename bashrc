@@ -86,10 +86,24 @@ if [ -f /usr/local/bin/atom ]; then
     alias a="atom -n"
 fi
 
+# Alias Sublime Text
+if [ -f /usr/local/bin/subl ]; then
+    alias s="subl -n"
+fi
+
+# Git aliases
+alias gis="git st"
+alias gil="git lg"
+alias gid="git diff"
+alias gic="git cia -m"
+
+# Go
+export GOPATH=$HOME/GoogleDrive/go_projects
+
 # Install liquidprompt
-  if [ -f /usr/local/share/liquidprompt ]; then
-    . /usr/local/share/liquidprompt
-  fi
+if [ -f /usr/local/share/liquidprompt ]; then
+  . /usr/local/share/liquidprompt
+fi
 
 # Load Git completion
 if [ -f ~/.git-completion.bash ]; then
