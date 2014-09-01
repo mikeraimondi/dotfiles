@@ -80,14 +80,14 @@ export LD_RUN_PATH=/usr/local/lib
 # Alias vim to vi
 alias vi="vim"
 
-# Set system editor to Atom and alias if it exists
+# Alias Atom
 if [ -f /usr/local/bin/atom ]; then
-    export EDITOR='atom -w -n'
     alias a="atom -n"
 fi
 
 # Alias Sublime Text
 if [ -f /usr/local/bin/subl ]; then
+    export EDITOR='subl -w -n'
     alias s="subl -n"
 fi
 
@@ -109,3 +109,7 @@ fi
 if [ -f ~/.git-completion.bash ]; then
   . ~/.git-completion.bash
 fi
+
+# Node version manager
+export NVM_DIR=~/.nvm
+source $(brew --prefix nvm)/nvm.sh

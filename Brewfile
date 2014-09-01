@@ -15,7 +15,7 @@ install imagemagick
 install liquidprompt
 install mysql
 install mongodb
-install node
+install nvm
 install phantomjs
 install postgresql
 install pow
