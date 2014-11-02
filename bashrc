@@ -99,6 +99,8 @@ alias gic="git cia -m"
 
 # Go
 export GOPATH=$HOME/GoogleDrive/go_projects
+export GOROOT=`go env GOROOT`
+export PATH=$PATH:$GOROOT/bin
 
 # Install liquidprompt
 if [ -f /usr/local/share/liquidprompt ]; then
