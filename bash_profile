@@ -1,10 +1,9 @@
+#!/usr/bin/env bash
+
 # include .bashrc if it exists
 if [ -f "$HOME/.bashrc" ]; then
 		. "$HOME/.bashrc"
 fi
-
-# pick up Homebrew binaries before system binaries
-export PATH="/usr/local/bin:$PATH"
 
 # Add global NPM packages to path
 export PATH="/usr/local/share/npm/bin:$PATH"

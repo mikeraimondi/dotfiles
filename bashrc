@@ -1,3 +1,5 @@
+#!/usr/bin/env bash
+
 # ~/.bashrc: executed by bash(1) for non-login shells.
 # see /usr/share/doc/bash/examples/startup-files (in the package bash-doc)
 # for examples
@@ -82,12 +84,12 @@ alias vi="vim"
 
 # Alias Atom
 if [ -f /usr/local/bin/atom ]; then
+    export EDITOR='atom -w -n'
     alias a="atom -n"
 fi
 
 # Alias Sublime Text
 if [ -f /usr/local/bin/subl ]; then
-    export EDITOR='subl -w -n'
     alias s="subl -n"
 fi
 
@@ -99,7 +101,8 @@ alias gic="git cia -m"
 
 # Go
 export GOPATH=$HOME/GoogleDrive/go_projects
-export GOROOT=`go env GOROOT`
+export PATH=$PATH:$GOPATH/bin
+export GOROOT=$(go env GOROOT)
 export PATH=$PATH:$GOROOT/bin
 
 # Install liquidprompt
@@ -114,4 +117,4 @@ fi
 
 # Node version manager
 export NVM_DIR=~/.nvm
-source $(brew --prefix nvm)/nvm.sh
+source "$(brew --prefix nvm)/nvm.sh"

@@ -18,11 +18,12 @@
 	lg = log --pretty=format:'%h %ad | %s%d [%an]' --graph --date=short
 	type = cat-file -t
   dump = cat-file -p
-[mergetool "sublime"]
-	cmd = subl -w -n $MERGED
-	trustExitCode = false
-[merge]
-	tool = sublime
 [filter "media"]
 	clean = git-media-clean %f
 	smudge = git-media-smudge %f
+[difftool "sourcetree"]
+	cmd = opendiff \"$LOCAL\" \"$REMOTE\"
+	path =
+[mergetool "sourcetree"]
+	cmd = /Applications/SourceTree.app/Contents/Resources/opendiff-w.sh \"$LOCAL\" \"$REMOTE\" -ancestor \"$BASE\" -merge \"$MERGED\"
+	trustExitCode = true
