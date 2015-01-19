@@ -104,6 +104,7 @@ export GOPATH=$HOME/GoogleDrive/go_projects
 export PATH=$PATH:$GOPATH/bin
 export GOROOT=$(go env GOROOT)
 export PATH=$PATH:$GOROOT/bin
+export GOMAXPROCS=$(getconf _NPROCESSORS_ONLN)
 
 # Install liquidprompt
 if [ -f /usr/local/share/liquidprompt ]; then
