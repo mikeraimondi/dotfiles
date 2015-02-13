@@ -1,0 +1,45 @@
+# Colorized listings
+export CLICOLOR=1
+
+# Colorized grep
+export GREP_OPTIONS='--color=auto'
+
+# For Powerline config files
+export XDG_CONFIG_HOME="$HOME/.config"
+
+# Make libraries in /usr/local available to Python
+export LD_RUN_PATH=/usr/local/lib
+
+# Alias vim to vi
+alias vi="vim"
+
+# Alias Atom
+if [ -f /usr/local/bin/atom ]; then
+    export EDITOR='atom -w -n'
+    alias a="atom -n"
+fi
+
+# Alias Sublime Text
+if [ -f /usr/local/bin/subl ]; then
+    alias s="subl -n"
+fi
+
+# Git aliases
+alias gis="git st"
+alias gil="git lg"
+alias gid="git diff"
+alias gic="git cia -m"
+
+# Go
+export GOPATH=$HOME/GoogleDrive/go_projects
+export PATH=$PATH:$GOPATH/bin
+export GOROOT=$(go env GOROOT)
+export PATH=$PATH:$GOROOT/bin
+export GOMAXPROCS=$(getconf _NPROCESSORS_ONLN)
+
+# Node version manager
+export NVM_DIR=~/.nvm
+source "$(brew --prefix nvm)/nvm.sh"
+
+# Load rbenv shims and autocompletion
+if which rbenv > /dev/null; then eval "$(rbenv init -)"; fi

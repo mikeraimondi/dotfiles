@@ -67,45 +67,6 @@ if [ -f /etc/bash_completion ] && ! shopt -oq posix; then
     . /etc/bash_completion
 fi
 
-# Colorized listings
-export CLICOLOR=1
-
-# Colorized grep
-export GREP_OPTIONS='--color=auto'
-
-# For Powerline config files
-export XDG_CONFIG_HOME="$HOME/.config"
-
-# Make libraries in /usr/local available to Python
-export LD_RUN_PATH=/usr/local/lib
-
-# Alias vim to vi
-alias vi="vim"
-
-# Alias Atom
-if [ -f /usr/local/bin/atom ]; then
-    export EDITOR='atom -w -n'
-    alias a="atom -n"
-fi
-
-# Alias Sublime Text
-if [ -f /usr/local/bin/subl ]; then
-    alias s="subl -n"
-fi
-
-# Git aliases
-alias gis="git st"
-alias gil="git lg"
-alias gid="git diff"
-alias gic="git cia -m"
-
-# Go
-export GOPATH=$HOME/GoogleDrive/go_projects
-export PATH=$PATH:$GOPATH/bin
-export GOROOT=$(go env GOROOT)
-export PATH=$PATH:$GOROOT/bin
-export GOMAXPROCS=$(getconf _NPROCESSORS_ONLN)
-
 # Install liquidprompt
 if [ -f /usr/local/share/liquidprompt ]; then
   . /usr/local/share/liquidprompt
@@ -116,6 +77,8 @@ if [ -f ~/.git-completion.bash ]; then
   . ~/.git-completion.bash
 fi
 
-# Node version manager
-export NVM_DIR=~/.nvm
-source "$(brew --prefix nvm)/nvm.sh"
+# Load gCloud completion
+if [ -f /opt/homebrew-cask/Caskroom/google-cloud-sdk/latest/google-cloud-sdk/path.bash.inc ]; then
+  source '/opt/homebrew-cask/Caskroom/google-cloud-sdk/latest/google-cloud-sdk/path.bash.inc'
+  source '/opt/homebrew-cask/Caskroom/google-cloud-sdk/latest/google-cloud-sdk/completion.bash.inc'
+fi
