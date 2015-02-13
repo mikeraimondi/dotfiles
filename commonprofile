@@ -13,23 +13,6 @@ export LD_RUN_PATH=/usr/local/lib
 # Alias vim to vi
 alias vi="vim"
 
-# Alias Atom
-if [ -f /usr/local/bin/atom ]; then
-    export EDITOR='atom -w -n'
-    alias a="atom -n"
-fi
-
-# Alias Sublime Text
-if [ -f /usr/local/bin/subl ]; then
-    alias s="subl -n"
-fi
-
-# Git aliases
-alias gis="git st"
-alias gil="git lg"
-alias gid="git diff"
-alias gic="git cia -m"
-
 # Go
 export GOPATH=$HOME/GoogleDrive/go_projects
 export PATH=$PATH:$GOPATH/bin

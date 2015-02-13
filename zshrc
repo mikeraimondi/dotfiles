@@ -45,7 +45,7 @@ ZSH_THEME="robbyrussell"
 # Custom plugins may be added to ~/.oh-my-zsh/custom/plugins/
 # Example format: plugins=(rails git textmate ruby lighthouse)
 # Add wisely, as too many plugins slow down shell startup.
-plugins=(git vi-mode)
+plugins=(git vi-mode atom)
 
 # User configuration
 
@@ -59,9 +59,9 @@ source $ZSH/oh-my-zsh.sh
 
 # Preferred editor for local and remote sessions
 # if [[ -n $SSH_CONNECTION ]]; then
-#   export EDITOR='vim'
+  export EDITOR='vim'
 # else
-#   export EDITOR='mvim'
+  export EDITOR='atom -w -n'
 # fi
 
 # Compilation flags
@@ -82,6 +82,17 @@ source $ZSH/oh-my-zsh.sh
 export KEYTIMEOUT=1 # Turn off lag when changing Vi mode
 
 eval "$(direnv hook zsh)"
+
+# Load AWS completion
+if [ -f /usr/local/share/zsh/site-functions/_aws ]; then
+  source /usr/local/share/zsh/site-functions/_aws
+fi
+
+# Load gCloud completion
+if [ -f /opt/homebrew-cask/Caskroom/google-cloud-sdk/latest/google-cloud-sdk/path.zsh.inc ]; then
+  source '/opt/homebrew-cask/Caskroom/google-cloud-sdk/latest/google-cloud-sdk/path.zsh.inc'
+  source '/opt/homebrew-cask/Caskroom/google-cloud-sdk/latest/google-cloud-sdk/completion.zsh.inc'
+fi
 
 source_sh () {
   emulate -LR sh
