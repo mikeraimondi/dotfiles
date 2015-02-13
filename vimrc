@@ -1,7 +1,7 @@
 "	Set basics
 set nocompatible
+filetype off
 syntax on
-filetype plugin indent on
 
 " Set preferred environment
 set ruler
@@ -22,47 +22,25 @@ set smartcase
 set hlsearch
 
 " Load plugins only on the latest versions
-if (v:version >= 703) && (has("patch754"))
-	" Install pathogen
-	runtime bundle/vim-pathogen/autoload/pathogen.vim
-	let g:pathogen_disabled = []
-	silent! execute pathogen#infect()
-	silent! execute pathogen#helptags()
-
-	" Set up powerline
-	" set rtp+=~/dotfiles/vim/bundle/powerline/powerline/bindings/vim
-	" Hide mode text below powerline
-	set noshowmode
-	" Fix esc delay
-	if ! has('gui_running')
-		set ttimeoutlen=10
-		augroup FastEscape
-			autocmd!
-			au InsertEnter * set timeoutlen=0
-			au InsertLeave * set timeoutlen=1000
-		augroup END
-	endif
+if (v:version >= 703)
+	set rtp+=~/.vim/bundle/Vundle.vim
+	call vundle#begin()
+	Plugin 'gmarik/Vundle.vim'
+	Plugin 'Valloric/YouCompleteMe'
+	Plugin 'myusuf3/numbers.vim'
+	Plugin 'scrooloose/nerdtree'
+	Plugin 'closetag.vim'
+	Plugin 'ctrlp.vim'
+	Plugin 'surround.vim'
+	call vundle#end()
 
 	" Open NERDtree if no files are specified
 	autocmd vimenter * if !argc() | NERDTree | endif
 	" Exit Vim if NERDtree is the only open window
 	autocmd bufenter * if (winnr("$") == 1 && exists("b:NERDTreeType") && b:NERDTreeType == "primary") | q | endif
 
-	" JFold should not fold on open
-	set foldlevel=10
-
-	" Set syntax checkers
-	let g:syntastic_ruby_checkers=['mri']
-
 	" Set colors
 	if $TERM == "xterm-256color" || $TERM == "screen-256color" || $COLORTERM == "gnome-terminal"
-		" Solarized scheme
-		" if has('gui_running')
-		"	set background=light
-		"else
-		"	set background=dark
-		"endif
-		"colorscheme solarized
 		" Zenburn scheme
 		"set t_Co=256
 		"let g:zenburn_high_Contrast=1
@@ -73,6 +51,7 @@ if (v:version >= 703) && (has("patch754"))
 		"hi Folded ctermfg=lightgray ctermbg=darkgray cterm=underline
 	endif
 endif
+filetype plugin indent on
 
 " Set shortcuts
 command -nargs=* E :Explore <args>

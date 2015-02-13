@@ -2,7 +2,7 @@
 	name = Michael Raimondi
 	email = mike@mikeraimondi.com
 [core]
-	excludesfile = ~/.gitignore_global
+	excludesfile = /Users/mike/.gitignore_global
 	autocrlf = input
 [push]
 	default = tracking
@@ -22,8 +22,12 @@
 	clean = git-media-clean %f
 	smudge = git-media-smudge %f
 [difftool "sourcetree"]
-	cmd = opendiff \"$LOCAL\" \"$REMOTE\"
+	cmd = /opt/homebrew-cask/Caskroom/p4merge/2014.2/p4merge.app/Contents/MacOS/p4merge \"$LOCAL\" \"$REMOTE\"
 	path =
 [mergetool "sourcetree"]
-	cmd = /Applications/SourceTree.app/Contents/Resources/opendiff-w.sh \"$LOCAL\" \"$REMOTE\" -ancestor \"$BASE\" -merge \"$MERGED\"
+	cmd = /opt/homebrew-cask/Caskroom/p4merge/2014.2/p4merge.app/Contents/MacOS/p4merge \"$BASE\" \"$LOCAL\" \"$REMOTE\" \"$MERGED\"
 	trustExitCode = true
+[merge]
+	tool = sourcetree
+[diff]
+	tool = sourcetree

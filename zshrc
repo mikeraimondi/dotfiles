@@ -23,7 +23,7 @@ ZSH_THEME="robbyrussell"
 # DISABLE_AUTO_TITLE="true"
 
 # Uncomment the following line to enable command auto-correction.
-# ENABLE_CORRECTION="true"
+ENABLE_CORRECTION="true"
 
 # Uncomment the following line to display red dots whilst waiting for completion.
 # COMPLETION_WAITING_DOTS="true"
@@ -45,7 +45,7 @@ ZSH_THEME="robbyrussell"
 # Custom plugins may be added to ~/.oh-my-zsh/custom/plugins/
 # Example format: plugins=(rails git textmate ruby lighthouse)
 # Add wisely, as too many plugins slow down shell startup.
-plugins=(git vi-mode atom)
+plugins=(git vi-mode atom brew brew-cask)
 
 # User configuration
 
@@ -58,11 +58,11 @@ source $ZSH/oh-my-zsh.sh
 # export LANG=en_US.UTF-8
 
 # Preferred editor for local and remote sessions
-# if [[ -n $SSH_CONNECTION ]]; then
+if [[ -n $SSH_CONNECTION ]]; then
   export EDITOR='vim'
-# else
-  export EDITOR='atom -w -n'
-# fi
+else
+  export EDITOR='vim'
+fi
 
 # Compilation flags
 # export ARCHFLAGS="-arch x86_64"
@@ -100,4 +100,4 @@ source_sh () {
 }
 
 # Load common config
-source_sh  $HOME/.commonprofile
+source_sh $HOME/.commonprofile
