@@ -1,4 +1,4 @@
-# Dotfiles for Michael Raimondi (zeno@pobox.com) #
+# Dotfiles for Michael Raimondi (mike@mikeraimondi.com) #
 
 ## This is my dotfiles. There are many like it, but this one is mine. ##
 
