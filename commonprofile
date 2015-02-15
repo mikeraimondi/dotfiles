@@ -4,9 +4,6 @@ export CLICOLOR=1
 # Colorized grep
 export GREP_OPTIONS='--color=auto'
 
-# For Powerline config files
-export XDG_CONFIG_HOME="$HOME/.config"
-
 # Make libraries in /usr/local available to Python
 export LD_RUN_PATH=/usr/local/lib
 
@@ -22,7 +19,16 @@ export GOMAXPROCS=$(getconf _NPROCESSORS_ONLN)
 
 # Node version manager
 export NVM_DIR=~/.nvm
-source "$(brew --prefix nvm)/nvm.sh"
+if [ -f /usr/local/bin/brew ]; then
+  source "$(brew --prefix nvm)/nvm.sh"
+fi
 
 # Load rbenv shims and autocompletion
 if which rbenv > /dev/null; then eval "$(rbenv init -)"; fi
+
+# Preferred editor for local and remote sessions
+if [[ -n $SSH_CONNECTION ]]; then
+  export EDITOR='vim'
+else
+  export EDITOR=$HOME/.editor
+fi

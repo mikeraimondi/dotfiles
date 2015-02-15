@@ -8,7 +8,7 @@
 
 dir=~/dotfiles                    # dotfiles directory
 olddir=~/dotfiles_old             # old dotfiles backup directory
-files="bashrc bash_profile vimrc tmux.conf gitignore_global gitconfig inputrc zshrc oh-my-zsh commonprofile git-completion.bash"  # list of files/folders to symlink in homedir
+files="bashrc bash_profile vimrc tmux.conf gitignore_global gitconfig inputrc zshrc oh-my-zsh commonprofile git-completion.bash editor"  # list of files/folders to symlink in homedir
 
 ##########
 
@@ -29,7 +29,3 @@ for file in $files; do
     echo "Creating symlink to $file in home directory."
     ln -s $dir/$file ~/.$file
 done
-
-# create symlink for vim color directory
-echo "Creating symlink to vim/color"
-ln -s ~/dotfiles/vim/zenburn/colors ~/dotfiles/vim/colors
