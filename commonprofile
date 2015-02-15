@@ -11,6 +11,9 @@ export LD_RUN_PATH=/usr/local/lib
 alias vi="vim"
 
 # Go
+if [ -f $HOME/go/bin/go ]; then
+ export PATH=$PATH:$HOME/go/bin
+fi
 export GOPATH=$HOME/GoogleDrive/go_projects
 export PATH=$PATH:$GOPATH/bin
 export GOROOT=$(go env GOROOT)
@@ -21,7 +24,10 @@ export GOMAXPROCS=$(getconf _NPROCESSORS_ONLN)
 export NVM_DIR=~/.nvm
 if [ -f /usr/local/bin/brew ]; then
   source "$(brew --prefix nvm)/nvm.sh"
+else
+	[ -s "$NVM_DIR/nvm.sh" ] && . "$NVM_DIR/nvm.sh"  # This loads nvm
 fi
+
 
 # Load rbenv shims and autocompletion
 if which rbenv > /dev/null; then eval "$(rbenv init -)"; fi
@@ -32,3 +38,4 @@ if [[ -n $SSH_CONNECTION ]]; then
 else
   export EDITOR=$HOME/.editor
 fi
+
