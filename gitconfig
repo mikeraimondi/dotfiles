@@ -24,7 +24,7 @@
 	smudge = git-media-smudge %f
 [difftool "sourcetree"]
 	cmd = /opt/homebrew-cask/Caskroom/p4merge/2014.2/p4merge.app/Contents/MacOS/p4merge \"$LOCAL\" \"$REMOTE\"
-	path =
+	path = 
 [mergetool "sourcetree"]
 	cmd = /opt/homebrew-cask/Caskroom/p4merge/2014.2/p4merge.app/Contents/MacOS/p4merge \"$BASE\" \"$LOCAL\" \"$REMOTE\" \"$MERGED\"
 	trustExitCode = true

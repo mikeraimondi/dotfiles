@@ -77,6 +77,10 @@ export KEYTIMEOUT=1 # Turn off lag when changing Vi mode
 bindkey -M vicmd 'k' history-substring-search-up
 bindkey -M vicmd 'j' history-substring-search-down
 
+# Needed for git HEAD^
+setopt NO_NOMATCH
+
+# Direnv
 eval "$(direnv hook zsh)"
 
 # Load AWS completion
