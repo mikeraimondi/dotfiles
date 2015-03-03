@@ -72,6 +72,11 @@ source $ZSH/oh-my-zsh.sh
 # alias zshconfig="mate ~/.zshrc"
 # alias ohmyzsh="mate ~/.oh-my-zsh"
 
+# Fix intermittent errors
+TRAPWINCH() {
+  zle && { zle reset-prompt; zle -R }
+}
+
 # Vi mode config
 export KEYTIMEOUT=1 # Turn off lag when changing Vi mode
 bindkey -M vicmd 'k' history-substring-search-up
