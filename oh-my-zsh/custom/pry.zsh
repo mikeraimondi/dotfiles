@@ -1,1 +1,0 @@
-alias pryr="pry-remote"
