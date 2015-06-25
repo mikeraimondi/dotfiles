@@ -1,2 +1,9 @@
 *.last-run
 *.cache
+atom/compile-cache
+atom/dev
+atom/packages
+atom/storage
+atom/.apm
+atom/.npm
+atom/.node-gyp

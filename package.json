@@ -3,6 +3,6 @@
   "version": "0.0.1",
   "private": true,
   "scripts": {
-    "preinstall": "npm i -g bower coffee-script grunt-cli yo"
+    "preinstall": "npm i -g bower coffee-script grunt-cli gulp yo htmlhint"
   }
 }

@@ -1,0 +1,45 @@
+"*":
+  editor:
+    fontFamily: "fira mono"
+    showInvisibles: true
+    showIndentGuide: true
+    softWrapAtPreferredLineLength: true
+    invisibles: {}
+  core:
+    themes: [
+      "atom-dark-ui"
+      "monokai"
+    ]
+  "vim-mode":
+    useSmartcaseForSearch: true
+  "exception-reporting":
+    userId: "1d229d36-9395-6a4a-f530-54d2a5ef4035"
+  welcome:
+    showOnStartup: false
+  "atom-beautify":
+    _analyticsUserId: "5719337d-b4d6-4036-8054-c47bf2389086"
+    beautifyEntireFileOnSave: false
+    ruby_rbeautify_path: "/Users/mike/.rbenv/shims/rbeautify"
+  "ruby-test":
+    rspecSingleCommand: "vagrant ssh -- \"bundle exec bin/rspec --tty {relative_path}:{line_number}\""
+    rspecFileCommand: "vagrant ssh -- \"bundle exec bin/rspec --tty {relative_path}\""
+    shell: "/usr/local/bin/zsh"
+  "merge-conflicts":
+    gitPath: "/usr/local/bin/git"
+  "go-plus":
+    showPanel: false
+  "autocomplete-plus":
+    fileBlacklist: [
+      "*.md"
+    ]
+    confirmCompletion: "tab"
+  "linter-ruby":
+    rubyExecutablePath: "/Users/mike/.rbenv/shims/ruby"
+  "relative-line-numbers":
+    showNormalLineNumbers: false
+  tabs:
+    usePreviewTabs: true
+    enableVcsColoring: true
+  "color-picker":
+    preferredFormat: "HSL"
+  linter: {}
