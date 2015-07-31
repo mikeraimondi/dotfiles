@@ -7,9 +7,10 @@ export GREP_OPTIONS='--color=auto'
 # Make libraries in /usr/local available to Python
 export LD_RUN_PATH=/usr/local/lib
 
-# Alias editors
+# Aliases
 alias vi="vim"
 alias a="atom"
+alias gsup="git submodule foreach git pull && git submodule update --init --recursive"
 
 # Go
 if [ -f $HOME/go/bin/go ]; then
