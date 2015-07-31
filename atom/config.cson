@@ -7,7 +7,7 @@
     invisibles: {}
   core:
     themes: [
-      "atom-dark-ui"
+      "one-dark-ui"
       "monokai"
     ]
   "vim-mode":
@@ -26,8 +26,7 @@
     shell: "/usr/local/bin/zsh"
   "merge-conflicts":
     gitPath: "/usr/local/bin/git"
-  "go-plus":
-    showPanel: false
+  "go-plus": {}
   "autocomplete-plus":
     fileBlacklist: [
       "*.md"
@@ -43,3 +42,7 @@
   "color-picker":
     preferredFormat: "HSL"
   linter: {}
+  "one-dark-ui":
+    layoutMode: "Compact"
+  "linter-eslint": {}
+  "tree-view": {}

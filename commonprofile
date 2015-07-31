@@ -7,8 +7,9 @@ export GREP_OPTIONS='--color=auto'
 # Make libraries in /usr/local available to Python
 export LD_RUN_PATH=/usr/local/lib
 
-# Alias vim to vi
+# Alias editors
 alias vi="vim"
+alias a="atom"
 
 # Go
 if [ -f $HOME/go/bin/go ]; then
@@ -27,7 +28,6 @@ if [ -f /usr/local/bin/brew ]; then
 else
 	[ -s "$NVM_DIR/nvm.sh" ] && . "$NVM_DIR/nvm.sh"  # This loads nvm
 fi
-
 
 # Load rbenv shims and autocompletion
 if [ -f $HOME/.rbenv/bin/rbenv ]; then
