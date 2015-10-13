@@ -67,18 +67,7 @@ if [ -f /etc/bash_completion ] && ! shopt -oq posix; then
     . /etc/bash_completion
 fi
 
-# Install liquidprompt
-if [ -f /usr/local/share/liquidprompt ]; then
-  . /usr/local/share/liquidprompt
-fi
-
 # Load Git completion
 if [ -f ~/.git-completion.bash ]; then
   . ~/.git-completion.bash
-fi
-
-# Load gCloud completion
-if [ -f /opt/homebrew-cask/Caskroom/google-cloud-sdk/latest/google-cloud-sdk/path.bash.inc ]; then
-  source '/opt/homebrew-cask/Caskroom/google-cloud-sdk/latest/google-cloud-sdk/path.bash.inc'
-  source '/opt/homebrew-cask/Caskroom/google-cloud-sdk/latest/google-cloud-sdk/completion.bash.inc'
 fi

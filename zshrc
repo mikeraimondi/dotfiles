@@ -28,3 +28,5 @@ source_sh () {
 
 # Load common config
 source_sh $HOME/.commonprofile
+
+test -e ${HOME}/.iterm2_shell_integration.zsh && source ${HOME}/.iterm2_shell_integration.zsh

@@ -11,6 +11,12 @@ export LD_RUN_PATH=/usr/local/lib
 alias vi="vim"
 alias a="atom"
 alias gsup="git submodule foreach git pull && git submodule update --init --recursive"
+alias vup="vagrant up && vagrant ssh"
+alias vsh="vagrant ssh"
+alias vex="vagrant suspend &; exit"
+
+# Java
+export JAVA_HOME=$(/usr/libexec/java_home)
 
 # Go
 if [ -f $HOME/go/bin/go ]; then
@@ -20,7 +26,6 @@ export GOPATH=$HOME/Dropbox/go_projects
 export PATH=$PATH:$GOPATH/bin
 export GOROOT=$(go env GOROOT)
 export PATH=$PATH:$GOROOT/bin
-export GOMAXPROCS=$(getconf _NPROCESSORS_ONLN)
 
 # Node version manager
 export NVM_DIR=~/.nvm
