@@ -22,8 +22,8 @@
 
 // style the background and foreground colors on the atom-text-editor-element itself
 atom-text-editor {
-  // color: white;
-  // background-color: hsl(180, 24%, 12%);
+  text-rendering: optimizeLegibility;
+  -webkit-font-feature-settings: "liga" on, "calt" on;
 }
 
 // To style other content in the text editor's shadow DOM, use the ::shadow expression

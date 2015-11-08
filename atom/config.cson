@@ -4,7 +4,8 @@
     showIndentGuide: true
     softWrapAtPreferredLineLength: true
     invisibles: {}
-    fontFamily: "fira mono"
+    fontFamily: "monoid-retina"
+    fontSize: 11
   core:
     themes: [
       "one-dark-ui"
@@ -32,9 +33,8 @@
       "*.md"
     ]
     confirmCompletion: "tab"
+    useAlternateScoring: true
   "linter-ruby": {}
-  "relative-line-numbers":
-    showNormalLineNumbers: false
   tabs:
     usePreviewTabs: true
     enableVcsColoring: true
@@ -43,13 +43,14 @@
   linter: {}
   "one-dark-ui":
     layoutMode: "Compact"
-  "linter-eslint": {}
+  "linter-eslint":
+    useGlobalEslint: true
   "tree-view": {}
   "atom-material-ui":
     compactTreeView: true
     tabSize: "Small"
   pigments: {}
-  "theme-toggler":
-    darkSyntaxTheme: "monokai"
   "theme-switcher":
     syntaxThemeOne: "monokai"
+  "fuzzy-finder":
+    useAlternateScoring: true

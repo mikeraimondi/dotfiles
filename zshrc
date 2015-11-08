@@ -30,3 +30,9 @@ source_sh () {
 source_sh $HOME/.commonprofile
 
 test -e ${HOME}/.iterm2_shell_integration.zsh && source ${HOME}/.iterm2_shell_integration.zsh
+
+# The next line updates PATH for the Google Cloud SDK.
+source '/Users/mike/.bin/google-cloud-sdk/path.zsh.inc'
+
+# The next line enables shell command completion for gcloud.
+source '/Users/mike/.bin/google-cloud-sdk/completion.zsh.inc'
