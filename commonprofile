@@ -16,7 +16,11 @@ alias vsh="vagrant ssh"
 alias vex="vagrant suspend &; exit"
 
 # Java
-export JAVA_HOME=$(/usr/libexec/java_home)
+if [ -f /usr/libexec/java_home ]; then
+	export JAVA_HOME=$(/usr/libexec/java_home)
+else
+	export JAVA_HOME=/usr/lib/jvm/default-java
+fi
 
 # Go
 if [ -f $HOME/go/bin/go ]; then
