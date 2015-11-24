@@ -57,6 +57,7 @@ brew 'nvm'
 brew 'ossp-uuid'
 brew 'otto'
 brew 'pandoc'
+brew 'postgres'
 brew 'percona-toolkit'
 brew 'phantomjs'
 brew 'protobuf', args: ['devel']
