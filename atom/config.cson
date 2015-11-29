@@ -5,7 +5,7 @@
     softWrapAtPreferredLineLength: true
     invisibles: {}
     fontFamily: "monoid-retina"
-    fontSize: 11
+    fontSize: 13
   core:
     themes: [
       "one-dark-ui"
@@ -54,3 +54,6 @@
     syntaxThemeOne: "monokai"
   "fuzzy-finder":
     useAlternateScoring: true
+  Zen:
+    showWordCount: "Right"
+    softWrap: true
