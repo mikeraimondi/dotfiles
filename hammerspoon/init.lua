@@ -3,8 +3,8 @@ local bigPanel = 2 / 3
 
 local smallPanel = 1 - bigPanel
 local previousUnitRect = nil
-local moveWindowTS = hs.timer.secondsSinceEpoch()
-local moveFocusedWindow = function(unitRect)
+local moveWindowTS = 0
+local function moveFocusedWindow(unitRect)
   local window = hs.window.frontmostWindow()
   if window == nil then return end
   if unitRect == previousUnitRect and hs.timer.secondsSinceEpoch() - moveWindowTS <= 2 then
