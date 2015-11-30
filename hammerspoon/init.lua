@@ -5,10 +5,12 @@ local smallPanel = 1 - bigPanel
 local previousUnitRect = nil
 local moveWindowTS = hs.timer.secondsSinceEpoch()
 local moveFocusedWindow = function(unitRect)
-  if unitRect == previousUnitRect and moveWindowTS - hs.timer.secondsSinceEpoch() <= 1 then
-    hs.window.focusedWindow():move(unitRect, hs.window.focusedWindow():screen():next(), nil, 0)
+  local window = hs.window.frontmostWindow()
+  if window == nil then return end
+  if unitRect == previousUnitRect and hs.timer.secondsSinceEpoch() - moveWindowTS <= 2 then
+    window:move(unitRect, window:screen():next(), nil, 0)
   else
-    hs.window.focusedWindow():move(unitRect, nil, nil, 0)
+    window:move(unitRect, nil, nil, 0)
   end
   moveWindowTS = hs.timer.secondsSinceEpoch()
   previousUnitRect = unitRect
