@@ -2,17 +2,16 @@ local moveCombo = {"ctrl", "alt"}
 local bigPanel = 2 / 3
 
 local smallPanel = 1 - bigPanel
-local switchScreen = nil
-local switchScreenTimer = nil
-local moveFocusedWindow = function(unitrect)
-  if switchScreen then
-    switchScreen = nil
-    hs.window.focusedWindow():move(unitrect, hs.window.focusedWindow():screen():next(), nil, 0)
+local previousUnitRect = nil
+local moveWindowTS = hs.timer.secondsSinceEpoch()
+local moveFocusedWindow = function(unitRect)
+  if unitRect == previousUnitRect and moveWindowTS - hs.timer.secondsSinceEpoch() <= 1 then
+    hs.window.focusedWindow():move(unitRect, hs.window.focusedWindow():screen():next(), nil, 0)
   else
-    switchScreen = true
-    switchScreenTimer = hs.timer.doAfter(1, function() switchScreen = nil end)
-    hs.window.focusedWindow():move(unitrect, nil, nil, 0)
+    hs.window.focusedWindow():move(unitRect, nil, nil, 0)
   end
+  moveWindowTS = hs.timer.secondsSinceEpoch()
+  previousUnitRect = unitRect
 end
 
 hs.hotkey.bind(moveCombo, "Q", function()
