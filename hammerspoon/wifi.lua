@@ -1,4 +1,4 @@
-local homeSSID = "strato-n.wifis.org"
+local homeSSID = 'strato-n.wifis.org'
 
 local lastSSID = hs.wifi.currentNetwork()
 local homeVolume = hs.audiodevice.defaultOutputDevice():volume()
