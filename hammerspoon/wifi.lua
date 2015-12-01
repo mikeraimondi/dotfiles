@@ -1,3 +1,5 @@
+-- WiFi triggers
+
 local homeSSID = 'strato-n.wifis.org'
 
 local lastSSID = hs.wifi.currentNetwork()

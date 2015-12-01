@@ -1,3 +1,5 @@
+-- Window management
+
 local moveCombo = {'ctrl', 'alt'}
 local bigPanel = 2 / 3
 
