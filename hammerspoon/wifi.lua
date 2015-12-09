@@ -2,22 +2,22 @@
 
 local homeSSID = 'strato-n.wifis.org'
 
-local lastSSID = hs.wifi.currentNetwork()
-local homeVolume = hs.audiodevice.defaultOutputDevice():volume()
+local previousSSID = hs.wifi.currentNetwork()
+local previouslyMuted = false
 
 local function ssidChangedCallback()
   local newSSID = hs.wifi.currentNetwork()
 
-  if newSSID == homeSSID and lastSSID ~= homeSSID then
+  if newSSID == homeSSID and previousSSID ~= homeSSID then
     -- We just joined our home WiFi network
-    hs.audiodevice.defaultOutputDevice():setVolume(homeVolume)
-  elseif newSSID ~= homeSSID and lastSSID == homeSSID then
+    hs.audiodevice.defaultOutputDevice():setMuted(previouslyMuted)
+  elseif newSSID ~= homeSSID and previousSSID == homeSSID then
     -- We just departed our home WiFi network
-    homeVolume = hs.audiodevice.defaultOutputDevice():volume()
-    hs.audiodevice.defaultOutputDevice():setVolume(0)
+    previouslyMuted = hs.audiodevice.defaultOutputDevice():muted()
+    hs.audiodevice.defaultOutputDevice():setMuted(true)
   end
 
-  lastSSID = newSSID
+  previousSSID = newSSID
 end
 
 hs.wifi.watcher.new(ssidChangedCallback):start()
