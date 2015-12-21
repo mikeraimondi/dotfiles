@@ -5,7 +5,7 @@
     softWrapAtPreferredLineLength: true
     invisibles: {}
     fontFamily: "monoid-retina"
-    fontSize: 13
+    fontSize: 12
   core:
     themes: [
       "one-dark-ui"
@@ -45,15 +45,18 @@
     layoutMode: "Compact"
   "linter-eslint":
     useGlobalEslint: true
-  "tree-view": {}
-  "atom-material-ui":
-    compactTreeView: true
-    tabSize: "Small"
-  pigments: {}
   "theme-switcher":
     syntaxThemeOne: "monokai"
-  "fuzzy-finder":
-    useAlternateScoring: true
   Zen:
     showWordCount: "Right"
     softWrap: true
+  "atom-material-ui":
+    fonts: {}
+    colors:
+      genAccent: true
+    ui:
+      panelContrast: true
+    tabs:
+      tintedTabBar: true
+    treeView:
+      compactList: true

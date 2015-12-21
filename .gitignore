@@ -1,5 +1,6 @@
 *.last-run
 *.cache
+atom/blob-store
 atom/compile-cache
 atom/dev
 atom/packages

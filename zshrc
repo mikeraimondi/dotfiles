@@ -37,3 +37,6 @@ test -e $HOME/.bin/google-cloud-sdk/path.zsh.inc && source ${HOME}/.bin/google-c
 
 # The next line enables shell command completion for gcloud.
 test -e $HOME/.bin/google-cloud-sdk/completion.zsh.inc && source ${HOME}/.bin/google-cloud-sdk/completion.zsh.inc
+
+# AWS CLI shell command completion
+test -e /usr/local/share/zsh/site-functions/_aws && source /usr/local/share/zsh/site-functions/_aws
