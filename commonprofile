@@ -32,19 +32,8 @@ export PATH=$PATH:$GOPATH/bin
 export GOROOT=$(go env GOROOT)
 export PATH=$PATH:$GOROOT/bin
 
-# Node version manager
-export NVM_DIR=~/.nvm
-if [ -f /usr/local/bin/brew ]; then
-  source "$(brew --prefix nvm)/nvm.sh"
-else
-	[ -s "$NVM_DIR/nvm.sh" ] && . "$NVM_DIR/nvm.sh"  # This loads nvm
-fi
-
-# Load rbenv shims and autocompletion
-if [ -f $HOME/.rbenv/bin/rbenv ]; then
-	export PATH="$HOME/.rbenv/bin:$PATH"
-fi
-if which rbenv > /dev/null; then eval "$(rbenv init -)"; fi
+# Node
+if which nodenv > /dev/null; then eval "$(nodenv init -)"; fi
 
 # Preferred editor for local and remote sessions
 if [[ -n $SSH_CONNECTION ]]; then
