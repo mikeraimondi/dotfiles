@@ -9,24 +9,16 @@
  * http://lesscss.org
  */
 
-
-/*
- * Examples
- * (To see them, uncomment and save)
- */
-
-// style the background color of the tree view
-.tree-view {
-  // background-color: whitesmoke;
-}
-
-// style the background and foreground colors on the atom-text-editor-element itself
 atom-text-editor {
   text-rendering: optimizeLegibility;
-  -webkit-font-feature-settings: "liga" on, "calt" on;
 }
 
-// To style other content in the text editor's shadow DOM, use the ::shadow expression
-atom-text-editor::shadow .cursor {
-  // border-color: red;
+atom-text-editor::shadow .string.quoted,
+atom-text-editor::shadow .string.regexp,
+atom-text-editor::shadow .source.gfm {
+  -webkit-font-feature-settings: "liga" off, "calt" off;
+}
+
+atom-text-editor::shadow .source.gfm .code {
+  -webkit-font-feature-settings: "liga" on, "calt" on;
 }

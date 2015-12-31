@@ -21,3 +21,32 @@
   'pry-remote':
     prefix: 'pryr'
     body: 'binding.remote_pry'
+
+'.source.gfm':
+  'cite':
+    prefix: 'c'
+    body: '<cite>$1</cite>'
+  'blockquote with cite':
+    prefix: 'bqc'
+    body: """
+      > $1
+      >
+      > <footer><cite>$2</cite></footer>
+    """
+  'blockquote for lyrics':
+    prefix: 'bql'
+    body: """
+      <blockquote vocab="http://schema.org/" typeof="MusicComposition">
+        <div property="lyrics" typeof="CreativeWork">
+          <div property="text">
+            $1
+          </div>
+        </div>
+        <footer>
+          <span property="composer" typeof="Person">
+            <span property="name">$2</span>
+          </span>
+          <cite property="name">$3</cite>
+        </footer>
+      </blockquote>
+    """

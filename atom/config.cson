@@ -4,8 +4,8 @@
     showIndentGuide: true
     softWrapAtPreferredLineLength: true
     invisibles: {}
-    fontFamily: "monoid-retina"
-    fontSize: 12
+    fontFamily: "firacode-light"
+    fontSize: 16
   core:
     themes: [
       "one-dark-ui"
@@ -60,3 +60,7 @@
       tintedTabBar: true
     treeView:
       compactList: true
+  "autoclose-html":
+    additionalGrammars: [
+      "GitHub Markdown"
+    ]
