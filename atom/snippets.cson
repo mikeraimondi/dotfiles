@@ -36,14 +36,14 @@
   'blockquote for lyrics':
     prefix: 'bql'
     body: """
-      <blockquote vocab="http://schema.org/" typeof="MusicComposition">
-        <div property="lyrics" typeof="CreativeWork">
-          <div property="text">
-            $1
-          </div>
+      <blockquote typeof="MusicRecording">
+        <div property="hasPart" typeof="CreativeWork">
+          <pre class="verse" property="text">
+      $1
+      </pre>
         </div>
         <footer>
-          <span property="composer" typeof="Person">
+          <span property="byArtist" typeof="MusicGroup">
             <span property="name">$2</span>
           </span>
           <cite property="name">$3</cite>

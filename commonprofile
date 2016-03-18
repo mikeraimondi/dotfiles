@@ -10,11 +10,16 @@ export LD_RUN_PATH=/usr/local/lib
 # Aliases
 alias vi="vim"
 alias a="atom"
-alias gsup="git submodule foreach git pull && git submodule update --init --recursive"
+alias gsup="git submodule foreach git checkout master && git pull && git submodule update --init --recursive"
 alias vup="vagrant up && vagrant ssh"
 alias vsh="vagrant ssh"
 alias vex="vagrant suspend &; exit"
-alias ncurl="/usr/local/Cellar/curl/7.45.0/bin/curl"
+alias dk="docker"
+alias dkm="docker-machine"
+alias dkms='docker-machine start && eval $(docker-machine env)'
+alias dkc="docker-compose"
+alias crl="/usr/local/Cellar/curl/7.47.0/bin/curl"
+alias ossl="/usr/local/Cellar/openssl/1.0.2f/bin/openssl"
 
 # Java
 if [ -f /usr/libexec/java_home ]; then
@@ -42,3 +47,9 @@ else
   export EDITOR=$HOME/.editor
 fi
 export BUNDLER_EDITOR=$EDITOR
+
+if command -v docker-machine >/dev/null 2>&1; then
+	if docker-machine status default | grep -q Running; then
+		eval $(docker-machine env default)
+	fi
+fi

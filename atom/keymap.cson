@@ -24,5 +24,59 @@
 # If you are unfamiliar with CSON, you can read more about it here:
 # https://github.com/bevry/cson#what-is-cson
 
+## RubyTest
 '.platform-darwin atom-text-editor:not(.mini)':
   'ctrl-cmd-e': 'ruby-test:test-previous'
+
+## Pane move
+# For OS X
+'.platform-darwin':
+  # Create an empty split pane
+  'cmd-k h':  'pane:split-left'
+  'cmd-k l': 'pane:split-right'
+  'cmd-k k':    'pane:split-up'
+  'cmd-k j':  'pane:split-down'
+
+  # Create a split pane with the current pane item moved into it
+  'cmd-k m h':  'pane:split-left-and-move-active-item'
+  'cmd-k m l': 'pane:split-right-and-move-active-item'
+  'cmd-k m k':    'pane:split-up-and-move-active-item'
+  'cmd-k m j':  'pane:split-down-and-move-active-item'
+
+  # Create a split pane with the current pane item duplicated
+  'cmd-k d h':  'pane:split-left-and-copy-active-item'
+  'cmd-k d l': 'pane:split-right-and-copy-active-item'
+  'cmd-k d k':    'pane:split-up-and-copy-active-item'
+  'cmd-k d j':  'pane:split-down-and-copy-active-item'
+
+  # Move the current pane item to the target split pane
+  'cmd-ctrl-shift-h':  'window:move-active-item-to-pane-on-left'
+  'cmd-ctrl-shift-l': 'window:move-active-item-to-pane-on-right'
+  'cmd-ctrl-shift-k':    'window:move-active-item-to-pane-above'
+  'cmd-ctrl-shift-j':  'window:move-active-item-to-pane-below'
+
+# For Windows and Linux
+'.platform-win32, .platform-linux':
+  # Create an empty split pane
+  'ctrl-k left':  'pane:split-left'
+  'ctrl-k right': 'pane:split-right'
+  'ctrl-k up':    'pane:split-up'
+  'ctrl-k down':  'pane:split-down'
+
+  # Create a split pane with the current pane item moved into it
+  'ctrl-k m left':  'pane:split-left-and-move-active-item'
+  'ctrl-k m right': 'pane:split-right-and-move-active-item'
+  'ctrl-k m up':    'pane:split-up-and-move-active-item'
+  'ctrl-k m down':  'pane:split-down-and-move-active-item'
+
+  # Create a split pane with the current pane item duplicated
+  'ctrl-k d left':  'pane:split-left-and-copy-active-item'
+  'ctrl-k d right': 'pane:split-right-and-copy-active-item'
+  'ctrl-k d up':    'pane:split-up-and-copy-active-item'
+  'ctrl-k d down':  'pane:split-down-and-copy-active-item'
+
+  # Move the current pane item to the target split pane
+  'alt-ctrl-shift-left':  'window:move-active-item-to-pane-on-left'
+  'alt-ctrl-shift-right': 'window:move-active-item-to-pane-on-right'
+  'alt-ctrl-shift-up':    'window:move-active-item-to-pane-above'
+  'alt-ctrl-shift-down':  'window:move-active-item-to-pane-below'

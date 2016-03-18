@@ -1,66 +1,61 @@
 "*":
-  editor:
-    showInvisibles: true
-    showIndentGuide: true
-    softWrapAtPreferredLineLength: true
-    invisibles: {}
-    fontFamily: "firacode-light"
-    fontSize: 16
+  Zen:
+    showWordCount: "Right"
+    softWrap: true
+  "atom-beautify":
+    _analyticsUserId: "5719337d-b4d6-4036-8054-c47bf2389086"
+    beautifyEntireFileOnSave: false
+    ruby_rbeautify_path: "/Users/mike/.rbenv/shims/rbeautify"
+  "autoclose-html":
+    additionalGrammars: [
+      "GitHub Markdown"
+    ]
+  "autocomplete-plus":
+    confirmCompletion: "tab"
+    fileBlacklist: [
+      "*.md"
+    ]
+    useAlternateScoring: true
+  "color-picker":
+    preferredFormat: "HSL"
   core:
     themes: [
       "one-dark-ui"
       "monokai"
     ]
-  "vim-mode":
-    useSmartcaseForSearch: true
+  editor:
+    fontFamily: "firacode-retina"
+    fontSize: 13
+    invisibles: {}
+    showIndentGuide: true
+    showInvisibles: true
+    softWrapAtPreferredLineLength: true
+    undoGroupingInterval: 100
   "exception-reporting":
     userId: "1d229d36-9395-6a4a-f530-54d2a5ef4035"
-  welcome:
-    showOnStartup: false
-  "atom-beautify":
-    _analyticsUserId: "5719337d-b4d6-4036-8054-c47bf2389086"
-    beautifyEntireFileOnSave: false
-    ruby_rbeautify_path: "/Users/mike/.rbenv/shims/rbeautify"
-  "ruby-test":
-    rspecSingleCommand: "vagrant ssh -- \"bundle exec bin/rspec --tty {relative_path}:{line_number}\""
-    rspecFileCommand: "vagrant ssh -- \"bundle exec bin/rspec --tty {relative_path}\""
-    shell: "/usr/local/bin/zsh"
-  "merge-conflicts":
-    gitPath: "/usr/local/bin/git"
   "go-plus": {}
-  "autocomplete-plus":
-    fileBlacklist: [
-      "*.md"
-    ]
-    confirmCompletion: "tab"
-    useAlternateScoring: true
-  "linter-ruby": {}
-  tabs:
-    usePreviewTabs: true
-    enableVcsColoring: true
-  "color-picker":
-    preferredFormat: "HSL"
+  "gometalinter-linter": {}
   linter: {}
-  "one-dark-ui":
-    layoutMode: "Compact"
   "linter-eslint":
     useGlobalEslint: true
+  "linter-ruby": {}
+  "markdown-writer":
+    siteEngine: "jekyll"
+  "merge-conflicts":
+    gitPath: "/usr/local/bin/git"
+  "one-dark-ui":
+    layoutMode: "Compact"
+  "ruby-test":
+    rspecFileCommand: "vagrant ssh -- \"bundle exec bin/rspec --tty {relative_path}\""
+    rspecSingleCommand: "vagrant ssh -- \"bundle exec bin/rspec --tty {relative_path}:{line_number}\""
+    shell: "/usr/local/bin/zsh"
+  tabs:
+    enableVcsColoring: true
+    usePreviewTabs: true
   "theme-switcher":
     syntaxThemeOne: "monokai"
-  Zen:
-    showWordCount: "Right"
-    softWrap: true
-  "atom-material-ui":
-    fonts: {}
-    colors:
-      genAccent: true
-    ui:
-      panelContrast: true
-    tabs:
-      tintedTabBar: true
-    treeView:
-      compactList: true
-  "autoclose-html":
-    additionalGrammars: [
-      "GitHub Markdown"
-    ]
+  "tree-view": {}
+  "vim-mode":
+    useSmartcaseForSearch: true
+  welcome:
+    showOnStartup: false
