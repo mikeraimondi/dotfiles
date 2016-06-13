@@ -8,3 +8,7 @@ atom/storage
 atom/.apm
 atom/.npm
 atom/.node-gyp
+gnupg/private-keys-v1.d
+gnupg/random_seed
+gnupg/secring.gpg
+gnupg/trustdb.gpg

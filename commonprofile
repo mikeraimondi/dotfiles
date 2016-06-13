@@ -1,3 +1,5 @@
+#!/bin/bash
+
 # Colorized listings
 export CLICOLOR=1
 
@@ -10,7 +12,7 @@ export LD_RUN_PATH=/usr/local/lib
 # Aliases
 alias vi="vim"
 alias a="atom"
-alias gsup="git submodule foreach git checkout master && git pull && git submodule update --init --recursive"
+alias gsup="git submodule foreach git checkout master"
 alias vup="vagrant up && vagrant ssh"
 alias vsh="vagrant ssh"
 alias vex="vagrant suspend &; exit"
@@ -23,7 +25,8 @@ alias ossl="/usr/local/Cellar/openssl/1.0.2f/bin/openssl"
 
 # Java
 if [ -f /usr/libexec/java_home ]; then
-	export JAVA_HOME=$(/usr/libexec/java_home)
+	JAVA_HOME=$(/usr/libexec/java_home)
+	export JAVA_HOME
 else
 	export JAVA_HOME=/usr/lib/jvm/default-java
 fi
@@ -34,7 +37,8 @@ if [ -f $HOME/go/bin/go ]; then
 fi
 export GOPATH=$HOME/Dropbox/go_projects
 export PATH=$PATH:$GOPATH/bin
-export GOROOT=$(go env GOROOT)
+GOROOT=$(go env GOROOT)
+export GOROOT
 export PATH=$PATH:$GOROOT/bin
 
 # Node
@@ -48,8 +52,13 @@ else
 fi
 export BUNDLER_EDITOR=$EDITOR
 
-if command -v docker-machine >/dev/null 2>&1; then
-	if docker-machine status default | grep -q Running; then
-		eval $(docker-machine env default)
-	fi
+# gpg-agent
+GPG_TTY=$(tty)
+export GPG_TTY
+# shellcheck source=/home/mike/.gpg-agent-info
+[ -f ~/.gpg-agent-info ] && source ~/.gpg-agent-info
+if [ -S "${GPG_AGENT_INFO%%:*}" ]; then
+  export GPG_AGENT_INFO
+else
+  eval "$(gpg-agent --daemon --write-env-file ~/.gpg-agent-info --default-cache-ttl 172800 --max-cache-ttl 1209600)"
 fi

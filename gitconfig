@@ -1,6 +1,7 @@
 [user]
 	name = Michael Raimondi
 	email = mike@mikeraimondi.com
+	signingkey = 96892A98
 [core]
 	excludesfile = /Users/mike/.gitignore_global
 	autocrlf = input
@@ -32,3 +33,10 @@
 	tool = sourcetree
 [diff]
 	tool = sourcetree
+[init]
+	templatedir = /Users/mike/dotfiles/githooks/githooks_bootstrap
+[hooks]
+	symlinksourcerepo = /Users/mike/dotfiles/githooks
+	require-strict-paren-spacing = false
+[commit]
+	gpgsign = true

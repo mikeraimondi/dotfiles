@@ -3,9 +3,11 @@
     showWordCount: "Right"
     softWrap: true
   "atom-beautify":
-    _analyticsUserId: "5719337d-b4d6-4036-8054-c47bf2389086"
-    beautifyEntireFileOnSave: false
-    ruby_rbeautify_path: "/Users/mike/.rbenv/shims/rbeautify"
+    general:
+      _analyticsUserId: "5719337d-b4d6-4036-8054-c47bf2389086"
+      beautifyEntireFileOnSave: false
+    ruby:
+      rbeautify_path: "/Users/mike/.rbenv/shims/rbeautify"
   "autoclose-html":
     additionalGrammars: [
       "GitHub Markdown"
@@ -24,8 +26,7 @@
       "monokai"
     ]
   editor:
-    fontFamily: "firacode-retina"
-    fontSize: 13
+    fontFamily: "firacode-light"
     invisibles: {}
     showIndentGuide: true
     showInvisibles: true
@@ -33,11 +34,14 @@
     undoGroupingInterval: 100
   "exception-reporting":
     userId: "1d229d36-9395-6a4a-f530-54d2a5ef4035"
+  "go-debug":
+    limitCommandsToGo: true
+    panelInitialVisible: false
   "go-plus": {}
+  gofmt: {}
   "gometalinter-linter": {}
   linter: {}
-  "linter-eslint":
-    useGlobalEslint: true
+  "linter-eslint": {}
   "linter-ruby": {}
   "markdown-writer":
     siteEngine: "jekyll"
@@ -49,9 +53,17 @@
     rspecFileCommand: "vagrant ssh -- \"bundle exec bin/rspec --tty {relative_path}\""
     rspecSingleCommand: "vagrant ssh -- \"bundle exec bin/rspec --tty {relative_path}:{line_number}\""
     shell: "/usr/local/bin/zsh"
+  "split-diff":
+    diffWords: true
+    ignoreWhitespace: true
+    leftEditorColor: "red"
+    rightEditorColor: "green"
+    syncHorizontalScroll: true
   tabs:
     enableVcsColoring: true
     usePreviewTabs: true
+  "tester-go":
+    runCoverageOnSave: true
   "theme-switcher":
     syntaxThemeOne: "monokai"
   "tree-view": {}
