@@ -35,7 +35,7 @@ fi
 if [ -f $HOME/go/bin/go ]; then
  export PATH=$PATH:$HOME/go/bin
 fi
-export GOPATH=$HOME/Dropbox/go_projects
+export GOPATH=$HOME/GDrive/go_projects
 export PATH=$PATH:$GOPATH/bin
 GOROOT=$(go env GOROOT)
 export GOROOT
@@ -51,6 +51,7 @@ else
   export EDITOR=$HOME/.editor
 fi
 export BUNDLER_EDITOR=$EDITOR
+export GURNEL_EDITOR=$HOME/.gurnel_editor
 
 # gpg-agent
 GPG_TTY=$(tty)
@@ -62,3 +63,6 @@ if [ -S "${GPG_AGENT_INFO%%:*}" ]; then
 else
   eval "$(gpg-agent --daemon --write-env-file ~/.gpg-agent-info --default-cache-ttl 172800 --max-cache-ttl 1209600)"
 fi
+
+# modern terminals only
+export TERM="xterm-256color"

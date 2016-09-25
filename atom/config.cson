@@ -18,9 +18,13 @@
       "*.md"
     ]
     useAlternateScoring: true
+  autosave: {}
   "color-picker":
     preferredFormat: "HSL"
   core:
+    disabledPackages: [
+      "go-debug"
+    ]
     themes: [
       "one-dark-ui"
       "monokai"
@@ -49,6 +53,7 @@
     gitPath: "/usr/local/bin/git"
   "one-dark-ui":
     layoutMode: "Compact"
+  "relative-numbers": {}
   "ruby-test":
     rspecFileCommand: "vagrant ssh -- \"bundle exec bin/rspec --tty {relative_path}\""
     rspecSingleCommand: "vagrant ssh -- \"bundle exec bin/rspec --tty {relative_path}:{line_number}\""
@@ -71,3 +76,6 @@
     useSmartcaseForSearch: true
   welcome:
     showOnStartup: false
+  wordcount:
+    goal: 750
+    ignorecode: true
