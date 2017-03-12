@@ -66,16 +66,5 @@ fi
 export BUNDLER_EDITOR=$EDITOR
 export GURNEL_EDITOR=$HOME/.gurnel_editor
 
-# gpg-agent
-GPG_TTY=$(tty)
-export GPG_TTY
-# shellcheck source=/home/mike/.gpg-agent-info
-[ -f ~/.gpg-agent-info ] && source ~/.gpg-agent-info
-if [ -S "${GPG_AGENT_INFO%%:*}" ]; then
-  export GPG_AGENT_INFO
-else
-  eval "$(gpg-agent --daemon --write-env-file ~/.gpg-agent-info --default-cache-ttl 172800 --max-cache-ttl 1209600)"
-fi
-
 # modern terminals only
 export TERM="xterm-256color"
