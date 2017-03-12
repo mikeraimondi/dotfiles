@@ -12,6 +12,7 @@ export LD_RUN_PATH=/usr/local/lib
 # Aliases
 alias vi="vim"
 alias a="atom"
+alias c="code"
 alias gsup="git submodule foreach git checkout master"
 alias vup="vagrant up && vagrant ssh"
 alias vsh="vagrant ssh"
@@ -40,6 +41,18 @@ export PATH=$PATH:$GOPATH/bin
 GOROOT=$(go env GOROOT)
 export GOROOT
 export PATH=$PATH:$GOROOT/bin
+
+# Rust
+# if [ -d $HOME/.cargo/bin ]; then
+#  export PATH=$PATH:$HOME/.cargo/bin
+# fi
+# if [ -d $HOME/GDrive/rust_projects/rust/src ]; then
+#  export RUST_SRC_PATH=$HOME/GDrive/rust_projects/rust/src
+# fi
+if [ -d $HOME/.cargo/bin ]; then
+  export PATH="$HOME/.cargo/bin:$PATH"
+fi
+export RUST_SRC_PATH=$HOME/.multirust/toolchains/stable-x86_64-apple-darwin/lib/rustlib/src/rust/src
 
 # Node
 if which nodenv > /dev/null; then eval "$(nodenv init -)"; fi

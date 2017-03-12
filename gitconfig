@@ -40,3 +40,5 @@
 	require-strict-paren-spacing = false
 [commit]
 	gpgsign = true
+[http "https://gopkg.in"]
+	followRedirects = true

@@ -1,6 +1,6 @@
 -- WiFi triggers
 
-local homeSSID = 'strato-n.wifis.org'
+local homeSSID = 'strato-5G'
 local vpnName  = 'streisand-direct'
 
 local speakers = hs.audiodevice.findOutputByName('Built-in Output')
