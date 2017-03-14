@@ -1,6 +1,6 @@
 [submodule "githooks"]
 	path = githooks
-	url = https://github.com/bobgilmore/githooks.git
+	url = https://github.com/mikeraimondi/githooks.git
 [submodule "zprezto"]
 	path = zprezto
 	url = https://github.com/sorin-ionescu/prezto.git
