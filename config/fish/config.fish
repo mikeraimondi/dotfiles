@@ -1,17 +1,43 @@
 # aliases
 alias vi="vim"
 alias c="code"
-alias gsup="git submodule foreach git checkout master"
 alias vup="vagrant up; and vagrant ssh"
 alias vsh="vagrant ssh"
 alias vex="vagrant suspend &; exit"
 alias dk="docker"
 alias dkc="docker-compose"
-alias crl="/usr/local/Cellar/curl/7.47.0/bin/curl"
-alias ossl="/usr/local/Cellar/openssl/1.0.2f/bin/openssl"
+alias gsup="git submodule foreach git checkout master"
+alias gws="git status -sb"
+alias gl="git log --pretty=format:'%h %ad | %s%d [%an]' --graph --date=short"
+alias gp="git push"
+alias gc="git commit"
+alias gca="git commit -a"
+alias gco="git checkout"
+alias gwd="git diff"
 
 # fish-specific setup
 fish_vi_key_bindings
+set __fish_git_prompt_show_informative_status 'yes'
+set __fish_git_prompt_showcolorhints 'yes'
+
+function fish_prompt --description "Write out the prompt"
+    set -l color_cwd
+    set -l suffix
+    switch $USER
+        case root toor
+            if set -q fish_color_cwd_root
+                set color_cwd $fish_color_cwd_root
+            else
+                set color_cwd $fish_color_cwd
+            end
+            set suffix '#'
+        case '*'
+            set color_cwd $fish_color_cwd
+            set suffix '>'
+    end
+
+    echo -n -s (__fish_git_prompt) ' ' (set_color $color_cwd) (prompt_pwd) (set_color normal) "$suffix "
+end
 
 # colorized grep
 set -x GREP_OPTIONS '--color=auto'
@@ -53,5 +79,6 @@ set -x RUST_SRC_PATH $HOME/.multirust/toolchains/stable-x86_64-apple-darwin/lib/
 status --is-interactive; and source (nodenv init -|psub)
 status --is-interactive; and source (rbenv init -|psub)
 
-# ITerm integration
+# misc
 test -e {$HOME}/.iterm2_shell_integration.fish ; and source {$HOME}/.iterm2_shell_integration.fish
+eval (direnv hook fish)

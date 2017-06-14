@@ -1,7 +1,7 @@
 -- WiFi triggers
 
 local homeSSID = 'strato-5G'
-local vpnName  = 'streisand-direct'
+local vpnName  = 'Primary'
 
 local speakers = hs.audiodevice.findOutputByName('Built-in Output')
 
