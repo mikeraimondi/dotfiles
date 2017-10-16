@@ -23,21 +23,15 @@
 [filter "media"]
 	clean = git-media-clean %f
 	smudge = git-media-smudge %f
-[difftool "sourcetree"]
-	cmd = /opt/homebrew-cask/Caskroom/p4merge/2014.2/p4merge.app/Contents/MacOS/p4merge \"$LOCAL\" \"$REMOTE\"
-	path =
+[merge]
+	tool = sourcetree
 [mergetool "sourcetree"]
 	cmd = /opt/homebrew-cask/Caskroom/p4merge/2014.2/p4merge.app/Contents/MacOS/p4merge \"$BASE\" \"$LOCAL\" \"$REMOTE\" \"$MERGED\"
 	trustExitCode = true
-[merge]
-	tool = sourcetree
 [diff]
-	tool = sourcetree
-[init]
-	templatedir = /Users/mike/dotfiles/githooks/githooks_bootstrap
-[hooks]
-	symlinksourcerepo = /Users/mike/dotfiles/githooks
-	require-strict-paren-spacing = false
+    tool = vscode
+[difftool "vscode"]
+    cmd = code --wait --diff $LOCAL $REMOTE
 [commit]
 	gpgsign = true
 [http "https://gopkg.in"]

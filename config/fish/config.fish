@@ -52,7 +52,7 @@ else
   set -x EDITOR $HOME/.editor
 end
 set -x BUNDLER_EDITOR $EDITOR
-set -x GURNEL_EDITOR $HOME/.gurnel_editor
+set -x GURNEL_EDITOR "code -w -n -a . $argv"
 
 # Java
 if test -d /usr/libexec/java_home
@@ -82,3 +82,10 @@ status --is-interactive; and source (rbenv init -|psub)
 # misc
 test -e {$HOME}/.iterm2_shell_integration.fish ; and source {$HOME}/.iterm2_shell_integration.fish
 eval (direnv hook fish)
+
+# tabtab source for serverless package
+# uninstall by removing these lines or running `tabtab uninstall serverless`
+[ -f /Users/mike/.nodenv/versions/8.1.2/lib/node_modules/serverless/node_modules/tabtab/.completions/serverless.fish ]; and . /Users/mike/.nodenv/versions/8.1.2/lib/node_modules/serverless/node_modules/tabtab/.completions/serverless.fish
+# tabtab source for sls package
+# uninstall by removing these lines or running `tabtab uninstall sls`
+[ -f /Users/mike/.nodenv/versions/8.1.2/lib/node_modules/serverless/node_modules/tabtab/.completions/sls.fish ]; and . /Users/mike/.nodenv/versions/8.1.2/lib/node_modules/serverless/node_modules/tabtab/.completions/sls.fish
