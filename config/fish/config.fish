@@ -65,7 +65,7 @@ end
 if test -d $HOME/go/bin/go
  set -x PATH $PATH $HOME/go/bin
 end
-set -x GOPATH $HOME/GDrive/go_projects
+set -x GOPATH $HOME/Documents/projects/go
 set -x PATH $PATH $GOPATH/bin
 set -x PATH $PATH /usr/local/opt/go/libexec/bin
 

@@ -21,6 +21,9 @@ set ignorecase
 set smartcase
 set hlsearch
 
+" Needed for Fish shell
+set shell=/bin/bash
+
 " Load plugins only on the latest versions
 if (v:version >= 703)
 	set rtp+=~/.vim/bundle/Vundle.vim
