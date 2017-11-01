@@ -3,6 +3,6 @@
   "version": "0.0.1",
   "private": true,
   "scripts": {
-    "preinstall": "npm i -g npm grunt-cli gulp yo generator-webapp htmlhint eslint typescript yarn"
+    "preinstall": "yarn global add gulp yo generator-webapp htmlhint eslint typescript"
   }
 }

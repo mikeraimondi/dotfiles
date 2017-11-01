@@ -12,3 +12,4 @@ gnupg/private-keys-v1.d
 gnupg/random_seed
 gnupg/secring.gpg
 gnupg/trustdb.gpg
+gnupg/*migrated
