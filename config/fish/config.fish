@@ -55,8 +55,8 @@ set -x BUNDLER_EDITOR $EDITOR
 set -x GURNEL_EDITOR "code -w -n -a . $argv"
 
 # Java
-if test -d /usr/libexec/java_home
-	set -x JAVA_HOME /usr/libexec/java_home
+if test -e /usr/libexec/java_home
+	set -x JAVA_HOME (/usr/libexec/java_home)
 else
 	set -x JAVA_HOME /usr/lib/jvm/default-java
 end
@@ -82,6 +82,7 @@ status --is-interactive; and source (rbenv init -|psub)
 # misc
 test -e {$HOME}/.iterm2_shell_integration.fish ; and source {$HOME}/.iterm2_shell_integration.fish
 eval (direnv hook fish)
+set -g fish_user_paths "/usr/local/opt/curl/bin" $fish_user_paths
 
 # tabtab source for serverless package
 # uninstall by removing these lines or running `tabtab uninstall serverless`
