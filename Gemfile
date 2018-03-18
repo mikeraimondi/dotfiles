@@ -1,7 +1,7 @@
 source 'https://rubygems.org'
 
 gem 'activesupport'
-gem 'pry'
 gem 'haml_lint'
+gem 'pry'
 gem 'rubocop'
 gem 'solargraph'
