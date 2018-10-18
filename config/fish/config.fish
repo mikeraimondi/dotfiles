@@ -14,30 +14,33 @@ alias gc="git commit"
 alias gca="git commit -a"
 alias gco="git checkout"
 alias gwd="git diff"
+alias b="bass"
+alias tf="terraform"
+alias kl="kubectl"
 
 # fish-specific setup
 fish_vi_key_bindings
 set __fish_git_prompt_show_informative_status 'yes'
 set __fish_git_prompt_showcolorhints 'yes'
 
-function fish_prompt --description "Write out the prompt"
-    set -l color_cwd
-    set -l suffix
-    switch $USER
-        case root toor
-            if set -q fish_color_cwd_root
-                set color_cwd $fish_color_cwd_root
-            else
-                set color_cwd $fish_color_cwd
-            end
-            set suffix '#'
-        case '*'
-            set color_cwd $fish_color_cwd
-            set suffix '>'
-    end
+# function fish_prompt --description "Write out the prompt"
+#     set -l color_cwd
+#     set -l suffix
+#     switch $USER
+#         case root toor
+#             if set -q fish_color_cwd_root
+#                 set color_cwd $fish_color_cwd_root
+#             else
+#                 set color_cwd $fish_color_cwd
+#             end
+#             set suffix '#'
+#         case '*'
+#             set color_cwd $fish_color_cwd
+#             set suffix '>'
+#     end
 
-    echo -n -s (__fish_git_prompt) ' ' (set_color $color_cwd) (prompt_pwd) (set_color normal) "$suffix "
-end
+#     echo -n -s (__fish_git_prompt) ' ' (set_color $color_cwd) (prompt_pwd) (set_color normal) "$suffix "
+# end
 
 # colorized grep
 set -x GREP_OPTIONS '--color=auto'
@@ -75,15 +78,13 @@ if test -d $HOME/.cargo/bin
 end
 set -x RUST_SRC_PATH $HOME/.multirust/toolchains/stable-x86_64-apple-darwin/lib/rustlib/src/rust/src
 
-# Nodenv & Rbenv
-status --is-interactive; and source (nodenv init -|psub)
-status --is-interactive; and source (rbenv init -|psub)
-
 # misc
-test -e {$HOME}/.iterm2_shell_integration.fish ; and source {$HOME}/.iterm2_shell_integration.fish
 eval (direnv hook fish)
 set -g fish_user_paths "/usr/local/opt/curl/bin" $fish_user_paths
-
+set -U Z_CMD "j"
+set -U FISH_KUBECTL_COMPLETION_TIMEOUT "2s"
+[ -f /usr/local/Caskroom/google-cloud-sdk/latest/google-cloud-sdk/completion.fish.inc ]; and . /usr/local/Caskroom/google-cloud-sdk/latest/google-cloud-sdk/completion.fish.inc
+set -x PATH $PATH /usr/local/Caskroom/google-cloud-sdk/latest/google-cloud-sdk/bin
 # tabtab source for serverless package
 # uninstall by removing these lines or running `tabtab uninstall serverless`
 [ -f /Users/mike/.nodenv/versions/8.1.2/lib/node_modules/serverless/node_modules/tabtab/.completions/serverless.fish ]; and . /Users/mike/.nodenv/versions/8.1.2/lib/node_modules/serverless/node_modules/tabtab/.completions/serverless.fish

@@ -13,3 +13,4 @@ gnupg/random_seed
 gnupg/*ring.gpg*
 gnupg/trustdb.gpg
 gnupg/*migrated
+gnupg/tofu.db
