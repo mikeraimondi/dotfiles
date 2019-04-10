@@ -17,6 +17,8 @@ alias gwd="git diff"
 alias b="bass"
 alias tf="terraform"
 alias kl="kubectl"
+alias klc="kubectx"
+alias kls="kubens"
 
 # fish-specific setup
 fish_vi_key_bindings
@@ -78,16 +80,24 @@ if test -d $HOME/.cargo/bin
 end
 set -x RUST_SRC_PATH $HOME/.multirust/toolchains/stable-x86_64-apple-darwin/lib/rustlib/src/rust/src
 
+# Node
+status --is-interactive; and source (nodenv init -|psub)
+
+# Ruby
+status --is-interactive; and source (rbenv init -|psub)
+
+# Fisherman
+if not functions -q fisher
+    set -q XDG_CONFIG_HOME; or set XDG_CONFIG_HOME ~/.config
+    curl https://git.io/fisher --create-dirs -sLo $XDG_CONFIG_HOME/fish/functions/fisher.fish
+    fish -c fisher
+end
+
 # misc
 eval (direnv hook fish)
 set -g fish_user_paths "/usr/local/opt/curl/bin" $fish_user_paths
-set -U Z_CMD "j"
+# TODO figure out how to make "j" work with https://github.com/fish-shell/fish-shell/blob/72d80c3d91bbd35bed0aafb5514c9834bb48e256/share/completions/j.fish
+# set -U Z_CMD "j"
 set -U FISH_KUBECTL_COMPLETION_TIMEOUT "2s"
 [ -f /usr/local/Caskroom/google-cloud-sdk/latest/google-cloud-sdk/completion.fish.inc ]; and . /usr/local/Caskroom/google-cloud-sdk/latest/google-cloud-sdk/completion.fish.inc
 set -x PATH $PATH /usr/local/Caskroom/google-cloud-sdk/latest/google-cloud-sdk/bin
-# tabtab source for serverless package
-# uninstall by removing these lines or running `tabtab uninstall serverless`
-[ -f /Users/mike/.nodenv/versions/8.1.2/lib/node_modules/serverless/node_modules/tabtab/.completions/serverless.fish ]; and . /Users/mike/.nodenv/versions/8.1.2/lib/node_modules/serverless/node_modules/tabtab/.completions/serverless.fish
-# tabtab source for sls package
-# uninstall by removing these lines or running `tabtab uninstall sls`
-[ -f /Users/mike/.nodenv/versions/8.1.2/lib/node_modules/serverless/node_modules/tabtab/.completions/sls.fish ]; and . /Users/mike/.nodenv/versions/8.1.2/lib/node_modules/serverless/node_modules/tabtab/.completions/sls.fish
