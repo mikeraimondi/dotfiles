@@ -78,13 +78,9 @@ set -x PATH $PATH /usr/local/opt/go/libexec/bin
 if test -d $HOME/.cargo/bin
   set -x PATH $PATH $HOME/.cargo/bin
 end
-set -x RUST_SRC_PATH $HOME/.multirust/toolchains/stable-x86_64-apple-darwin/lib/rustlib/src/rust/src
 
 # Node
 status --is-interactive; and source (nodenv init -|psub)
-
-# Ruby
-status --is-interactive; and source (rbenv init -|psub)
 
 # Fisherman
 if not functions -q fisher
@@ -101,3 +97,4 @@ set -g fish_user_paths "/usr/local/opt/curl/bin" $fish_user_paths
 set -U FISH_KUBECTL_COMPLETION_TIMEOUT "2s"
 [ -f /usr/local/Caskroom/google-cloud-sdk/latest/google-cloud-sdk/completion.fish.inc ]; and . /usr/local/Caskroom/google-cloud-sdk/latest/google-cloud-sdk/completion.fish.inc
 set -x PATH $PATH /usr/local/Caskroom/google-cloud-sdk/latest/google-cloud-sdk/bin
+set -g fish_user_paths "/usr/local/opt/ruby/bin" $fish_user_paths

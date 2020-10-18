@@ -34,3 +34,5 @@
 	gpgsign = true
 [http "https://gopkg.in"]
 	followRedirects = true
+[http]
+	cookiefile = /Users/mike/.gitcookies

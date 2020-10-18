@@ -14,3 +14,4 @@ gnupg/*ring.gpg*
 gnupg/trustdb.gpg
 gnupg/*migrated
 gnupg/tofu.db
+Brewfile.lock.json
