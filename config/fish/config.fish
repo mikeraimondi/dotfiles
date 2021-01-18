@@ -25,25 +25,6 @@ fish_vi_key_bindings
 set __fish_git_prompt_show_informative_status 'yes'
 set __fish_git_prompt_showcolorhints 'yes'
 
-# function fish_prompt --description "Write out the prompt"
-#     set -l color_cwd
-#     set -l suffix
-#     switch $USER
-#         case root toor
-#             if set -q fish_color_cwd_root
-#                 set color_cwd $fish_color_cwd_root
-#             else
-#                 set color_cwd $fish_color_cwd
-#             end
-#             set suffix '#'
-#         case '*'
-#             set color_cwd $fish_color_cwd
-#             set suffix '>'
-#     end
-
-#     echo -n -s (__fish_git_prompt) ' ' (set_color $color_cwd) (prompt_pwd) (set_color normal) "$suffix "
-# end
-
 # colorized grep
 set -x GREP_OPTIONS '--color=auto'
 
@@ -79,9 +60,6 @@ if test -d $HOME/.cargo/bin
   set -x PATH $PATH $HOME/.cargo/bin
 end
 
-# Node
-status --is-interactive; and source (nodenv init -|psub)
-
 # Fisherman
 if not functions -q fisher
     set -q XDG_CONFIG_HOME; or set XDG_CONFIG_HOME ~/.config
@@ -89,12 +67,13 @@ if not functions -q fisher
     fish -c fisher
 end
 
+# Google Cloud SDK.
+source "/usr/local/Caskroom/google-cloud-sdk/latest/google-cloud-sdk/path.fish.inc"
+
 # misc
-eval (direnv hook fish)
 set -g fish_user_paths "/usr/local/opt/curl/bin" $fish_user_paths
 # TODO figure out how to make "j" work with https://github.com/fish-shell/fish-shell/blob/72d80c3d91bbd35bed0aafb5514c9834bb48e256/share/completions/j.fish
 # set -U Z_CMD "j"
 set -U FISH_KUBECTL_COMPLETION_TIMEOUT "2s"
-[ -f /usr/local/Caskroom/google-cloud-sdk/latest/google-cloud-sdk/completion.fish.inc ]; and . /usr/local/Caskroom/google-cloud-sdk/latest/google-cloud-sdk/completion.fish.inc
-set -x PATH $PATH /usr/local/Caskroom/google-cloud-sdk/latest/google-cloud-sdk/bin
 set -g fish_user_paths "/usr/local/opt/ruby/bin" $fish_user_paths
+direnv hook fish | source
