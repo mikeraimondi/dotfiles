@@ -77,3 +77,6 @@ set -g fish_user_paths "/usr/local/opt/curl/bin" $fish_user_paths
 set -U FISH_KUBECTL_COMPLETION_TIMEOUT "2s"
 set -g fish_user_paths "/usr/local/opt/ruby/bin" $fish_user_paths
 direnv hook fish | source
+if test -d "$HOME/Library/Application Support/Code/User/globalStorage/ms-vscode-remote.remote-containers/cli-bin"
+	set -x PATH $PATH "$HOME/Library/Application Support/Code/User/globalStorage/ms-vscode-remote.remote-containers/cli-bin"
+end

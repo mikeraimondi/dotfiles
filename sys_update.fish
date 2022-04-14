@@ -1,4 +1,4 @@
 brew upgrade
 rustup update
-npm install npm@latest -g
+npm install -g npm@latest
 fisher update

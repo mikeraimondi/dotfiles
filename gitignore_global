@@ -19,3 +19,6 @@ Thumbs.db
 
 # VSCode config #
 .vscode
+
+# Google Drive #
+.tmp.driveupload
