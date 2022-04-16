@@ -4,7 +4,6 @@
 [user]
 	name = Michael Raimondi
 	email = mike@mikeraimondi.com
-	signingkey = 96892A98
 [core]
 	excludesfile = /Users/mike/.gitignore_global
 	autocrlf = input
@@ -30,8 +29,6 @@
     tool = vscode
 [difftool "vscode"]
     cmd = code --wait --diff $LOCAL $REMOTE
-[commit]
-	gpgsign = true
 [http "https://gopkg.in"]
 	followRedirects = true
 [http]
