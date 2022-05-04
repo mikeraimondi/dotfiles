@@ -55,6 +55,10 @@ set -x GOPATH $HOME/Documents/projects/go
 set -x PATH $PATH $GOPATH/bin
 set -x PATH $PATH /usr/local/opt/go/libexec/bin
 
+# Ruby
+fish_add_path /opt/homebrew/opt/ruby/bin
+fish_add_path /opt/homebrew/lib/ruby/gems/3.1.0/bin
+
 # Rust
 if test -d $HOME/.cargo/bin
     set -x PATH $PATH $HOME/.cargo/bin
